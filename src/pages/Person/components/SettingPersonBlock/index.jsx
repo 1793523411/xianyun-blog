@@ -46,8 +46,8 @@ const SettingPersonBlock = (props) => {
       .then((res) => {
         console.log(res.data);
         setValue({
-          name: res.data.userNickName,
-          phone: res.data.lottery,
+          userNickName: res.data.userNickName,
+          phone: res.data.phone,
           email: res.data.email,
           userId: res.data.userId,
           userTrueName: res.data.userTrueName,
@@ -119,18 +119,18 @@ const SettingPersonBlock = (props) => {
             <Divider />
           </FormItem>
 
-          <FormItem label="用户id" colSpan={12}>
+          {/* <FormItem label="用户id" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="" name="userId" disabled />
-          </FormItem>
+          </FormItem> */}
           <FormItem label="昵称" required requiredMessage="必填" colSpan={12}>
-            <Input placeholder="请输入昵称" name="name" />
+            <Input placeholder="请输入昵称" name="userNickName" />
           </FormItem>
 
           <FormItem label="手机：" colSpan={12}>
-            <Input className={styles.validateCodeInput} placeholder="请输入手机" name="phone" />
+            <Input className={styles.validateCodeInput} placeholder="请输入手机" disabled name="phone" />
           </FormItem>
           <FormItem label="邮件" colSpan={12}>
-            <Input className={styles.validateCodeInput} placeholder="请输入邮件" name="email" />
+            <Input className={styles.validateCodeInput} placeholder="请输入邮件" disabled name="email" />
           </FormItem>
           <FormItem label="真实姓名" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入真实姓名" name="userTrueName" />
