@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Message, Form, Divider, Checkbox, Icon } from '@alifd/next';
 import { useInterval } from './utils';
 import styles from './index.module.scss';
@@ -24,6 +24,14 @@ const LoginBlock = (
   const [isRunning, checkRunning] = useState(false);
   const [isPhone, checkPhone] = useState(false);
   const [second, setSecond] = useState(59);
+
+  useEffect(() => {
+    // location.reload();
+    if (location.href.indexOf('#reloaded') == -1) {
+      location.href = location.href + '#reloaded';
+      location.reload();
+    }
+  }, [1]);
 
   const history = useHistory();
   useInterval(
@@ -86,10 +94,11 @@ const LoginBlock = (
         password: values.password,
         loginType: 1,
       };
-      await request.post('/login', data).then(res => {
+      await request.post('/login', data).then((res) => {
         console.log(res);
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
+          history.push('/');
         } else {
           Message.success('用户名或密码错误');
         }
@@ -102,7 +111,7 @@ const LoginBlock = (
         password: values.password,
         loginType: 3,
       };
-      await request.post('/login', data).then(res => {
+      await request.post('/login', data).then((res) => {
         console.log(res);
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
@@ -121,7 +130,7 @@ const LoginBlock = (
         password: values.password,
         loginType: 0,
       };
-      await request.post('/login', data).then(res => {
+      await request.post('/login', data).then((res) => {
         console.log(res);
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
@@ -135,7 +144,6 @@ const LoginBlock = (
 
     console.log('values:', values);
     // Message.success('登录成功');
-
   };
 
   const phoneForm = (

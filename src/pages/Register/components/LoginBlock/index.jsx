@@ -1,7 +1,7 @@
 /* eslint-disable @iceworks/best-practices/no-secret-info */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Message, Form, Divider} from '@alifd/next';
+import { Input, Message, Form, Divider } from '@alifd/next';
 import { useInterval } from './utils';
 import styles from './index.module.scss';
 
@@ -43,8 +43,16 @@ export default function RegisterBlock() {
       return;
     } // get values.phone
 
-    if (values.phone) {
+    if (values.mobile) {
       Message.success('电话注册');
+      const data = {
+        mobile: values.mobile,
+        model: '注册',
+        type: 0,
+      };
+      await request.post('/register/sms', data).then((res) => {
+        console.log(res);
+      });
     } else {
       const data = {
         email: values.email,
@@ -144,7 +152,7 @@ export default function RegisterBlock() {
     <>
       <Item format="tel" required requiredMessage="必填" asterisk={false}>
         <Input
-          name="phone"
+          name="mobile"
           size="large"
           innerBefore={
             <span className={styles.innerBeforeInput}>
@@ -170,7 +178,7 @@ export default function RegisterBlock() {
                   width: 64,
                 }}
                 disabled={!!isRunning}
-                validate={['phone']}
+                validate={['mobile']}
                 onClick={sendCode}
                 className={styles.sendCode}
               >
@@ -206,15 +214,14 @@ export default function RegisterBlock() {
         {/* <p className={styles.desc}>注册账号</p> */}
         <div className={styles.desc}>
           <span onClick={byAccount} className={isPhone ? undefined : styles.active}>
-            账户密码登录
+            账户密码注册
           </span>
           <Divider direction="ver" />
           <span onClick={byForm} className={isPhone ? styles.active : undefined}>
-            手机号登录
+            手机号注册
           </span>
         </div>
         <Form value={postData} onChange={formChange} size="large">
-
           {isPhone ? phone : email}
           <Item required requiredMessage="必填">
             <Input.Password name="password" size="large" htmlType="password" placeholder="至少六位密码，区分大小写" />

@@ -65,8 +65,8 @@ export default function BasicLayout({ children }) {
       >
         <Shell.Branding>
           <Logo
-            image="https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png"
-            text="Logo"
+            image="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1602131927458&di=6799058154d372a49c741986be041110&imgtype=0&src=http%3A%2F%2Fku.90sjimg.com%2Felement_origin_min_pic%2F17%2F03%2F26%2Fcafc6ea253bc2ebc78918dc44c8671c7.jpg"
+            text="闲云"
           />
         </Shell.Branding>
         <Shell.Navigation

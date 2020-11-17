@@ -36,12 +36,12 @@ const HeaderAvatar = (props) => {
         setValue({
           name: res.data.userNickName,
           lottery: res.data.lottery,
-          avatar: 'https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png',
+          avatar: res.data.avatar,
         });
       })
       .catch((e) => {
         console.log(e);
-        history.push('/feedback/403')
+        history.push('/feedback/403');
       });
   }, []);
 

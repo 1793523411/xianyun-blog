@@ -11,10 +11,13 @@ const EditorBlock = (props) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [htmlContent, setHtmlContent] = useState('');
-  // const history = useHistory();
-  // useEffect(() => {
-  //   history.push('/editor');
-  // }, []);
+  const history = useHistory();
+  useEffect(() => {
+    if (location.href.indexOf('#reloaded') == -1) {
+      location.href = location.href + '#reloaded';
+      location.reload();
+    }
+  }, []);
 
   const renderer = new marked.Renderer();
   marked.setOptions({

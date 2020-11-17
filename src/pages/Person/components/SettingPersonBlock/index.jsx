@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Box, ResponsiveGrid, Divider, Card, Avatar, Upload, Button, Form, Input, Message } from '@alifd/next';
+import {
+  Box,
+  ResponsiveGrid,
+  Divider,
+  Card,
+  Avatar,
+  Upload,
+  Button,
+  Form,
+  Input,
+  Message,
+  DatePicker,
+} from '@alifd/next';
 import styles from './index.module.scss';
 
 import { useHistory, request } from 'ice';
@@ -25,6 +37,7 @@ const SettingPersonBlock = (props) => {
       .post('/user/info/update', postData)
       .then((res) => {
         console.log(res);
+        location.reload();
       })
       .catch((e) => {
         console.log(e);
@@ -54,6 +67,13 @@ const SettingPersonBlock = (props) => {
           area: res.data.area,
           lottery: res.data.lottery,
           position: res.data.position,
+          avatar: res.data.avatar,
+          education: res.data.education,
+          company: res.data.company,
+          startWorkTime: res.data.startWorkTime,
+          industry: res.data.industry,
+          password: res.data.password,
+          birthday: res.data.birthday,
         });
       })
       .catch((e) => {
@@ -85,6 +105,23 @@ const SettingPersonBlock = (props) => {
     }, 1000);
   };
 
+  const onSuccess = async (info) => {
+    await request
+      .post('/user/info/update', { avatar: info.response.url })
+      .then((res) => {
+        setValue({
+          avatar: info.response.url,
+        });
+        location.reload();
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+        history.push('/feedback/403');
+      });
+    console.log(info);
+  };
+
   return (
     <Card free>
       <Card.Content className={styles.SettingPersonBlock}>
@@ -92,7 +129,7 @@ const SettingPersonBlock = (props) => {
           <FormItem label="" colSpan={12}>
             <ResponsiveGrid gap={10}>
               <Cell colSpan={2}>
-                <Avatar shape="circle" size={64} icon="account" />
+                <Avatar shape="circle" size={64} src={postData.avatar} icon="account" />
               </Cell>
               <Cell colSpan={10} className={styles.changeLogo}>
                 <Box spacing={12}>
@@ -101,6 +138,7 @@ const SettingPersonBlock = (props) => {
                       name="pic"
                       // eslint-disable-next-line @iceworks/best-practices/no-http-url
                       action="http://127.0.0.1:3000/users/upload"
+                      onSuccess={onSuccess}
                     >
                       <Button className={styles.uploadButton} type="normal">
                         更新头像
@@ -135,14 +173,38 @@ const SettingPersonBlock = (props) => {
           <FormItem label="真实姓名" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入真实姓名" name="userTrueName" />
           </FormItem>
-          <FormItem label="地区" colSpan={12}>
+          <FormItem label="位置" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入地区" name="area" />
           </FormItem>
-          <FormItem label="lottery" colSpan={12}>
+          <FormItem label="个签" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入lottery" name="lottery" />
           </FormItem>
-          <FormItem label="岗位" colSpan={12}>
+          <FormItem label="职位" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="position" />
+          </FormItem>
+          <FormItem label="生日" colSpan={12}>
+            {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="birthday" /> */}
+            <FormItem style={{ marginRight: 10, marginBottom: 0 }}>
+              <DatePicker name="birthday" />
+            </FormItem>
+          </FormItem>
+          {/* <FormItem label="密码" colSpan={12}>
+            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="password" />
+          </FormItem> */}
+          <FormItem label="行业" colSpan={12}>
+            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="industry" />
+          </FormItem>
+          <FormItem label="开始工作时间" colSpan={12}>
+            {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="startWorkTime" /> */}
+            <FormItem style={{ marginRight: 10, marginBottom: 0 }}>
+              <DatePicker name="startWorkTime" />
+            </FormItem>
+          </FormItem>
+          <FormItem label="公司" colSpan={12}>
+            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="company" />
+          </FormItem>
+          <FormItem label="学历" colSpan={12}>
+            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="education" />
           </FormItem>
 
           <FormItem colSpan={12}>
