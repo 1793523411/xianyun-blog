@@ -82,8 +82,32 @@ export default function RegisterBlock() {
       console.log('errors', errors);
       return;
     }
+    console.log(values)
     if (values.phone) {
       Message.success('电话注册');
+      const data = {
+        mobile: values.mobile,
+        model: '注册',
+        code: values.code,
+        type: 1,
+      };
+
+      await request.post('/register/sms/check', data).then((res) => {
+        console.log(res);
+        if (res.data === 100) {
+          const data2 = {
+            mobile: values.mobile,
+            password: values.password,
+          };
+          request.post('/register', data2).then((res2) => {
+            console.log(res2);
+            Message.success('注册成功，请登录');
+            history.push('/user');
+          });
+        } else {
+          Message.success(`${res.defaultMessage}`);
+        }
+      });
     } else {
       const data = {
         email: values.email,
@@ -117,7 +141,7 @@ export default function RegisterBlock() {
   const email = (
     <>
       <Item format="email" required requiredMessage="必填">
-        <Input name="email" size="large" maxLength={20} placeholder="邮箱" />
+        <Input name="email" size="large" maxLength={50} placeholder="邮箱" />
       </Item>
       <Item required requiredMessage="必填">
         <Input
@@ -154,13 +178,13 @@ export default function RegisterBlock() {
         <Input
           name="mobile"
           size="large"
-          innerBefore={
-            <span className={styles.innerBeforeInput}>
-              +86
-              <span className={styles.line} />
-            </span>
-          }
-          maxLength={20}
+          // innerBefore={
+          //   // <span className={styles.innerBeforeInput}>
+          //   //   +86
+          //   //   <span className={styles.line} />
+          //   // </span>
+          // }
+          // maxLength={20}
           placeholder="手机号"
         />
       </Item>
@@ -214,7 +238,7 @@ export default function RegisterBlock() {
         {/* <p className={styles.desc}>注册账号</p> */}
         <div className={styles.desc}>
           <span onClick={byAccount} className={isPhone ? undefined : styles.active}>
-            账户密码注册
+            邮箱注册
           </span>
           <Divider direction="ver" />
           <span onClick={byForm} className={isPhone ? styles.active : undefined}>

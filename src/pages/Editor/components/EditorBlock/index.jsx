@@ -13,10 +13,10 @@ const EditorBlock = (props) => {
   const [formatContent, setHtmlContent] = useState('');
   const history = useHistory();
   useEffect(() => {
-    if (location.href.indexOf('#reloaded') == -1) {
-      location.href = location.href + '#reloaded';
-      location.reload();
-    }
+    // if (location.href.indexOf('#reloaded') == -1) {
+    //   location.href = location.href + '#reloaded';
+    //   location.reload();
+    // }
   }, []);
 
   const renderer = new marked.Renderer();
@@ -61,8 +61,18 @@ const EditorBlock = (props) => {
         style={{ width: '49%', paddingLeft: '1%' }}
         aria-label="style width 400"
       />
-      <Switch checkedChildren="置顶" className={styles.largeWidth} onChange={onChangetopPriority} unCheckedChildren="不置顶" />
-      <Switch checkedChildren="原创" className={styles.largeWidth} onChange={onChangetopPriority} unCheckedChildren="非原创" />
+      <Switch
+        checkedChildren="置顶"
+        className={styles.largeWidth}
+        onChange={onChangetopPriority}
+        unCheckedChildren="不置顶"
+      />
+      <Switch
+        checkedChildren="原创"
+        className={styles.largeWidth}
+        onChange={onChangetopPriority}
+        unCheckedChildren="非原创"
+      />
       <br />
       <br />
       <Box direction="row" justify="center" padding={10}>

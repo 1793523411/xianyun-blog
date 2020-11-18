@@ -26,11 +26,11 @@ const LoginBlock = (
   const [second, setSecond] = useState(59);
 
   useEffect(() => {
-    // location.reload();
-    if (location.href.indexOf('#reloaded') == -1) {
-      location.href = location.href + '#reloaded';
-      location.reload();
-    }
+    // // location.reload();
+    // if (location.href.indexOf('#reloaded') == -1) {
+    //   location.href = location.href + '#reloaded';
+    //   location.reload();
+    // }
   }, [1]);
 
   const history = useHistory();
@@ -198,7 +198,7 @@ const LoginBlock = (
   const accountForm = (
     <>
       <Item required requiredMessage="必填">
-        <Input name="name" maxLength={20} placeholder="用户名/手机号/邮箱" />
+        <Input name="name" maxLength={50} placeholder="用户名/手机号/邮箱" />
       </Item>
       <Item
         required

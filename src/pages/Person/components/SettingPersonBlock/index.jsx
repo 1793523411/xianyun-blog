@@ -11,8 +11,11 @@ import {
   Input,
   Message,
   DatePicker,
+  Select,
 } from '@alifd/next';
 import styles from './index.module.scss';
+
+import store from '@/store';
 
 import { useHistory, request } from 'ice';
 
@@ -27,6 +30,8 @@ const DEFAULT_DATA = {
 
 const SettingPersonBlock = (props) => {
   const history = useHistory();
+  const [userState, userDispatchers] = store.useModel('user');
+
   const DEFAULT_ON_SUBMIT = async (values, errors) => {
     if (errors) {
       console.log('errors', errors);
@@ -37,14 +42,15 @@ const SettingPersonBlock = (props) => {
       .post('/user/info/update', postData)
       .then((res) => {
         console.log(res);
-        location.reload();
+        // location.reload();
       })
       .catch((e) => {
         console.log(e);
-        history.push('/feedback/403');
+        history.push('/user/login');
       });
 
     console.log('values:', values);
+    userDispatchers.fetchUserProfile();
     Message.success('更新成功');
   };
 
@@ -52,9 +58,11 @@ const SettingPersonBlock = (props) => {
   const [postData, setValue] = useState(dataSource);
   const [buttonText, setButtonText] = useState('发送验证码');
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [selectValue, setSelectValue] = useState('');
+  const [selectValueindustry, setSelectValueindustry] = useState('');
 
-  useEffect(async () => {
-    await request
+  useEffect(() => {
+    request
       .get('/user/info')
       .then((res) => {
         console.log(res.data);
@@ -75,10 +83,12 @@ const SettingPersonBlock = (props) => {
           password: res.data.password,
           birthday: res.data.birthday,
         });
+        setSelectValue(res.data.education);
+        setSelectValueindustry(res.data.industry);
       })
       .catch((e) => {
         console.log(e);
-        history.push('/feedback/403');
+        history.push('/user/login');
       });
   }, []);
 
@@ -112,14 +122,42 @@ const SettingPersonBlock = (props) => {
         setValue({
           avatar: info.response.url,
         });
-        location.reload();
+        // location.reload();
+        userDispatchers.fetchUserProfile();
         console.log(res);
       })
       .catch((e) => {
         console.log(e);
-        history.push('/feedback/403');
+        history.push('/user/login');
       });
     console.log(info);
+  };
+
+  const Option = Select.Option;
+
+  const onChange = function (value) {
+    console.log(value);
+    setValue({ education: value });
+  };
+  const onBlur = function (e) {
+    console.log(/onblur/, e);
+  };
+
+  const onToggleHighlightItem = function (item, type) {
+    console.log(item, type);
+    setSelectValue(postData.education);
+  };
+  const onChangeindustry = function (value) {
+    console.log(value);
+    setValue({ industry: value });
+  };
+  const onBlurindustry = function (e) {
+    console.log(/onblur/, e);
+  };
+
+  const onToggleHighlightItemindustry = function (item, type) {
+    console.log(item, type);
+    setSelectValueindustry(postData.industry);
   };
 
   return (
@@ -186,26 +224,69 @@ const SettingPersonBlock = (props) => {
           <FormItem label="生日" colSpan={12}>
             {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="birthday" /> */}
             <FormItem style={{ marginRight: 10, marginBottom: 0 }}>
-              <DatePicker name="birthday" />
+              <DatePicker name="birthday" className={styles.dataWidth} />
             </FormItem>
           </FormItem>
           {/* <FormItem label="密码" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="password" />
           </FormItem> */}
           <FormItem label="行业" colSpan={12}>
-            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="industry" />
+            {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="industry" /> */}
+            {selectValueindustry && (
+              <Select
+                id="basic-demo"
+                onChange={onChangeindustry}
+                onBlur={onBlurindustry}
+                onToggleHighlightItem={onToggleHighlightItemindustry}
+                defaultValue={selectValueindustry}
+                aria-label="行业是"
+                showSearch
+                hasClear
+                className={styles.validateCodeInput}
+              >
+                <Option value="IT">IT</Option>
+                <Option value="金融">金融</Option>
+                <Option value="商业">商业</Option>
+                <Option value="专科生">文化</Option>
+                <Option value="文化">艺术</Option>
+                <Option value="法律">法律</Option>
+                <Option value="教育">教育</Option>
+                <Option value="学生">学生</Option>
+                <Option value="其他">其他</Option>
+              </Select>
+            )}
           </FormItem>
           <FormItem label="开始工作时间" colSpan={12}>
             {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="startWorkTime" /> */}
             <FormItem style={{ marginRight: 10, marginBottom: 0 }}>
-              <DatePicker name="startWorkTime" />
+              <DatePicker name="startWorkTime" className={styles.dataWidth} />
             </FormItem>
           </FormItem>
           <FormItem label="公司" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="company" />
           </FormItem>
           <FormItem label="学历" colSpan={12}>
-            <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="education" />
+            {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="education" /> */}
+            {selectValue && (
+              <Select
+                id="basic-demo"
+                onChange={onChange}
+                onBlur={onBlur}
+                onToggleHighlightItem={onToggleHighlightItem}
+                defaultValue={selectValue}
+                aria-label="学历是"
+                showSearch
+                hasClear
+                className={styles.validateCodeInput}
+              >
+                <Option value="博士生">博士生</Option>
+                <Option value="研究生">研究生</Option>
+                <Option value="本科生">本科生</Option>
+                <Option value="专科生">专科生</Option>
+                <Option value="其他">其他</Option>
+                <Option value="其他">其他</Option>
+              </Select>
+            )}
           </FormItem>
 
           <FormItem colSpan={12}>

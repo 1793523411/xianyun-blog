@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Shell, ConfigProvider } from '@alifd/next';
 import PageNav from './components/PageNav';
 import GlobalSearch from './components/GlobalSearch';
@@ -7,6 +7,8 @@ import SolutionLink from './components/SolutionLink';
 import HeaderAvatar from './components/HeaderAvatar';
 import Logo from './components/Logo';
 import Footer from './components/Footer';
+
+import { useHistory } from 'ice';
 
 (function () {
   const throttle = function (type, name, obj = window) {
@@ -33,9 +35,14 @@ import Footer from './components/Footer';
 })();
 
 export default function BasicLayout({ children }) {
+  const history = useHistory();
+  useEffect(() => {
+    if (!window.sessionStorage.getItem('token')) {
+      history.push('/user/login');
+    }
+  }, []);
   const getDevice = (width) => {
-    const isPhone =
-      typeof navigator !== 'undefined' && navigator && navigator.userAgent.match(/phone/gi);
+    const isPhone = typeof navigator !== 'undefined' && navigator && navigator.userAgent.match(/phone/gi);
 
     if (width < 680 || isPhone) {
       return 'phone';

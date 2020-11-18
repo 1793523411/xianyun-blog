@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, Overlay, Menu, Icon, Message } from '@alifd/next';
 import styles from './index.module.scss';
 import { useHistory, Link, request } from 'ice';
+import store from '@/store';
 
 const { Item } = Menu;
 const { Popup } = Overlay;
@@ -28,11 +29,15 @@ const HeaderAvatar = (props) => {
     avatar: 'https://img.alicdn.com/tfs/TB1.ZBecq67gK0jSZFHXXa9jVXa-904-826.png',
   });
 
-  useEffect(async () => {
-    await request
+  const [userState, userDispatchers] = store.useModel('user');
+  useEffect(() => {
+    // store.dispatch({ type: '' });
+    // store.dispatch({type:'UPDATE'})
+    userDispatchers.fetchUserProfile();
+    request
       .get('/user/info')
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setValue({
           name: res.data.userNickName,
           lottery: res.data.lottery,
@@ -41,7 +46,7 @@ const HeaderAvatar = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        history.push('/feedback/403');
+        history.push('/user/login');
       });
   }, []);
 
@@ -52,7 +57,7 @@ const HeaderAvatar = (props) => {
     Message.success('已退出，请重新登录');
   };
 
-  const { name, avatar } = postData;
+  const { name, avatar } = userState;
   return (
     <Popup
       trigger={
@@ -70,7 +75,7 @@ const HeaderAvatar = (props) => {
       triggerType="click"
     >
       <div className={styles.avatarPopup}>
-        <UserProfile {...postData} />
+        <UserProfile {...userState} />
         <Menu className={styles.menu}>
           <Item>
             <Link
