@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Box } from '@alifd/next';
+import { Input, Box, Switch } from '@alifd/next';
 import styles from './index.module.scss';
 import marked from 'marked';
 import hljs from 'highlight.js';
@@ -9,8 +9,8 @@ import { useHistory, request } from 'ice';
 
 const EditorBlock = (props) => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [htmlContent, setHtmlContent] = useState('');
+  const [summary, setContent] = useState('');
+  const [formatContent, setHtmlContent] = useState('');
   const history = useHistory();
   useEffect(() => {
     if (location.href.indexOf('#reloaded') == -1) {
@@ -43,7 +43,11 @@ const EditorBlock = (props) => {
     console.log(v);
     setContent(v);
 
-    setHtmlContent(marked(content));
+    setHtmlContent(marked(summary));
+  }
+
+  function onChangetopPriority(checked) {
+    console.log(`switch to ${checked}`);
   }
   return (
     <div>
@@ -54,9 +58,11 @@ const EditorBlock = (props) => {
         maxLength={100}
         onChange={onChangeTitle}
         hasLimitHint
-        style={{ width: '50%', paddingLeft: '1%' }}
+        style={{ width: '49%', paddingLeft: '1%' }}
         aria-label="style width 400"
       />
+      <Switch checkedChildren="置顶" className={styles.largeWidth} onChange={onChangetopPriority} unCheckedChildren="不置顶" />
+      <Switch checkedChildren="原创" className={styles.largeWidth} onChange={onChangetopPriority} unCheckedChildren="非原创" />
       <br />
       <br />
       <Box direction="row" justify="center" padding={10}>
@@ -66,7 +72,7 @@ const EditorBlock = (props) => {
           autoHeight={{ minRows: 25, maxRows: 999999 }}
           style={{ width: '50%', marginRight: '2%' }}
         />
-        <div dangerouslySetInnerHTML={{ __html: htmlContent }} className={styles.htmlContent}></div>
+        <div dangerouslySetInnerHTML={{ __html: formatContent }} className={styles.htmlContent}></div>
       </Box>
     </div>
   );

@@ -137,7 +137,8 @@ const SettingPersonBlock = (props) => {
                     <Upload
                       name="pic"
                       // eslint-disable-next-line @iceworks/best-practices/no-http-url
-                      action="http://127.0.0.1:3000/users/upload"
+                      // action="http://127.0.0.1:3000/users/upload"
+                      action="http://ice-blog-server.ygjie.icu/users/upload"
                       onSuccess={onSuccess}
                     >
                       <Button className={styles.uploadButton} type="normal">

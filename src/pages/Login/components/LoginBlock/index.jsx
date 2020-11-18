@@ -98,6 +98,7 @@ const LoginBlock = (
         console.log(res);
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
+          window.sessionStorage.setItem('token', res.data.token);
           history.push('/');
         } else {
           Message.success('用户名或密码错误');
