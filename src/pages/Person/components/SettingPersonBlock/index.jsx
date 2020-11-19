@@ -12,12 +12,14 @@ import {
   Message,
   DatePicker,
   Select,
+  Dialog,
 } from '@alifd/next';
 import styles from './index.module.scss';
 
 import store from '@/store';
 
 import { useHistory, request } from 'ice';
+import EmailCode from './EmailCode';
 
 const { Cell } = ResponsiveGrid;
 const FormItem = Form.Item;
@@ -61,6 +63,8 @@ const SettingPersonBlock = (props) => {
   const [selectValue, setSelectValue] = useState('');
   const [selectValueindustry, setSelectValueindustry] = useState('');
 
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     request
       .get('/user/info')
@@ -82,6 +86,7 @@ const SettingPersonBlock = (props) => {
           industry: res.data.industry,
           password: res.data.password,
           birthday: res.data.birthday,
+          // password: res.data.password,
         });
         setSelectValue(res.data.education);
         setSelectValueindustry(res.data.industry);
@@ -160,6 +165,17 @@ const SettingPersonBlock = (props) => {
     setSelectValueindustry(postData.industry);
   };
 
+  const onOpen = () => {
+    console.log(visible);
+    setVisible(true);
+  };
+
+  const onClose = (reason) => {
+    console.log(reason);
+
+    setVisible(false);
+  };
+
   return (
     <Card free>
       <Card.Content className={styles.SettingPersonBlock}>
@@ -175,8 +191,9 @@ const SettingPersonBlock = (props) => {
                     <Upload
                       name="pic"
                       // eslint-disable-next-line @iceworks/best-practices/no-http-url
-                      // action="http://127.0.0.1:3000/users/upload"
-                      action="http://ice-blog-server.ygjie.icu/users/upload"
+                      action="http://127.0.0.1:3000/users/upload"
+                      // action="http://ice-blog-server.ygjie.icu/users/upload"
+                      accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
                       onSuccess={onSuccess}
                     >
                       <Button className={styles.uploadButton} type="normal">
@@ -207,7 +224,23 @@ const SettingPersonBlock = (props) => {
             <Input className={styles.validateCodeInput} placeholder="请输入手机" disabled name="phone" />
           </FormItem>
           <FormItem label="邮件" colSpan={12}>
-            <Input className={styles.validateCodeInput} placeholder="请输入邮件" disabled name="email" />
+            {!postData.email ? (
+              <Input className={styles.validateCodeInput} placeholder="请输入邮件" disabled name="email" />
+            ) : (
+              <Button type="normal" onClick={onOpen}>
+                绑定邮箱
+              </Button>
+            )}
+            <Dialog
+              title="绑定邮箱"
+              visible={visible}
+              footer={false}
+              onOk={onClose}
+              onCancel={onClose}
+              onClose={onClose}
+            >
+              <EmailCode />
+            </Dialog>
           </FormItem>
           <FormItem label="真实姓名" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="请输入真实姓名" name="userTrueName" />
@@ -232,6 +265,29 @@ const SettingPersonBlock = (props) => {
           </FormItem> */}
           <FormItem label="行业" colSpan={12}>
             {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="industry" /> */}
+            {!selectValueindustry && (
+              <Select
+                id="basic-demo"
+                onChange={onChangeindustry}
+                onBlur={onBlurindustry}
+                onToggleHighlightItem={onToggleHighlightItemindustry}
+                defaultValue={selectValueindustry}
+                aria-label="行业是"
+                showSearch
+                hasClear
+                className={styles.validateCodeInput}
+              >
+                <Option value="IT">IT</Option>
+                <Option value="金融">金融</Option>
+                <Option value="商业">商业</Option>
+                <Option value="专科生">文化</Option>
+                <Option value="文化">艺术</Option>
+                <Option value="法律">法律</Option>
+                <Option value="教育">教育</Option>
+                <Option value="学生">学生</Option>
+                <Option value="其他">其他</Option>
+              </Select>
+            )}
             {selectValueindustry && (
               <Select
                 id="basic-demo"
@@ -268,6 +324,26 @@ const SettingPersonBlock = (props) => {
           <FormItem label="学历" colSpan={12}>
             {/* <Input className={styles.validateCodeInput} placeholder="请输入岗位" name="education" /> */}
             {selectValue && (
+              <Select
+                id="basic-demo"
+                onChange={onChange}
+                onBlur={onBlur}
+                onToggleHighlightItem={onToggleHighlightItem}
+                defaultValue={selectValue}
+                aria-label="学历是"
+                showSearch
+                hasClear
+                className={styles.validateCodeInput}
+              >
+                <Option value="博士生">博士生</Option>
+                <Option value="研究生">研究生</Option>
+                <Option value="本科生">本科生</Option>
+                <Option value="专科生">专科生</Option>
+                <Option value="其他">其他</Option>
+                <Option value="其他">其他</Option>
+              </Select>
+            )}
+            {!selectValue && (
               <Select
                 id="basic-demo"
                 onChange={onChange}

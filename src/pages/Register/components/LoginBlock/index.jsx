@@ -5,7 +5,7 @@ import { Input, Message, Form, Divider } from '@alifd/next';
 import { useInterval } from './utils';
 import styles from './index.module.scss';
 
-import { Link, request } from 'ice';
+import { useHistory,Link, request } from 'ice';
 
 const { Item } = Form;
 export default function RegisterBlock() {
@@ -20,6 +20,7 @@ export default function RegisterBlock() {
   const [second, setSecond] = useState(59);
 
   const [isPhone, setIsPhone] = useState(false);
+  const history = useHistory();
 
   useInterval(
     () => {
@@ -37,7 +38,7 @@ export default function RegisterBlock() {
     setValue(value);
   };
 
-  const sendCode = async (values, errors) => {
+  const sendCode = (values, errors) => {
     Message.success('验证码已发送');
     if (errors) {
       return;
@@ -48,9 +49,9 @@ export default function RegisterBlock() {
       const data = {
         mobile: values.mobile,
         model: '注册',
-        type: 0,
+        type: 1,
       };
-      await request.post('/register/sms', data).then((res) => {
+      request.post('/register/sms', data).then((res) => {
         console.log(res);
       });
     } else {
@@ -60,7 +61,7 @@ export default function RegisterBlock() {
         type: 1,
       };
 
-      await request.post('/register/smtp', data).then((res) => {
+      request.post('/register/smtp', data).then((res) => {
         console.log(res);
       });
     }
@@ -82,7 +83,7 @@ export default function RegisterBlock() {
       console.log('errors', errors);
       return;
     }
-    console.log(values)
+    console.log(values);
     if (values.phone) {
       Message.success('电话注册');
       const data = {
