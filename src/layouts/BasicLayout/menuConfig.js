@@ -62,59 +62,59 @@ const asideMenuConfig = [
   //     },
   //   ],
   // },
-  // {
-  //   name: '列表页面',
-  //   path: '/',
-  //   icon: 'chart-bar',
-  //   children: [
-  //     {
-  //       name: '基础列表',
-  //       path: '/list/basic',
-  //     },
-  //     {
-  //       name: '卡片列表',
-  //       path: '/list/card',
-  //     },
-  //     {
-  //       name: '表格列表',
-  //       path: '/',
-  //       children: [
-  //         {
-  //           name: '基础过滤',
-  //           path: '/list/table/filter',
-  //         },
-  //         {
-  //           name: '单列过滤',
-  //           path: '/list/table/singlecol',
-  //         },
-  //         {
-  //           name: '多列过滤',
-  //           path: '/list/table/mutilcol',
-  //         },
-  //         {
-  //           name: '带操作列',
-  //           path: '/list/table/action',
-  //         },
-  //         {
-  //           name: '可展开表',
-  //           path: '/list/table/expand',
-  //         },
-  //         {
-  //           name: '单层树表',
-  //           path: '/list/table/singletree',
-  //         },
-  //         {
-  //           name: '弹窗表格',
-  //           path: '/list/table/dialog',
-  //         },
-  //         {
-  //           name: '合并单元格',
-  //           path: '/list/table/mergecell',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    name: '列表页面',
+    path: '/',
+    icon: 'chart-bar',
+    children: [
+      {
+        name: '基础列表',
+        path: '/list/basic',
+      },
+      {
+        name: '卡片列表',
+        path: '/list/card',
+      },
+      {
+        name: '表格列表',
+        path: '/',
+        children: [
+          {
+            name: '基础过滤',
+            path: '/list/table/filter',
+          },
+          {
+            name: '单列过滤',
+            path: '/list/table/singlecol',
+          },
+          {
+            name: '多列过滤',
+            path: '/list/table/mutilcol',
+          },
+          {
+            name: '带操作列',
+            path: '/list/table/action',
+          },
+          {
+            name: '可展开表',
+            path: '/list/table/expand',
+          },
+          {
+            name: '单层树表',
+            path: '/list/table/singletree',
+          },
+          {
+            name: '弹窗表格',
+            path: '/list/table/dialog',
+          },
+          {
+            name: '合并单元格',
+            path: '/list/table/mergecell',
+          },
+        ],
+      },
+    ],
+  },
   // {
   //   name: '详情页面',
   //   path: '/',
@@ -179,12 +179,12 @@ const asideMenuConfig = [
     children: [
       {
         name: '编辑文章',
-        path: '/editor',
+        path: '/editor/0',
       },
-      // {
-      //   name: '注册',
-      //   path: '/user/register',
-      // },
+      {
+        name: '文章列表',
+        path: '/bloglist',
+      },
     ],
   },
 ];

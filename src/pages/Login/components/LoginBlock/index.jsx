@@ -51,35 +51,49 @@ const LoginBlock = (
   };
 
   const sendCode = (values, errors) => {
+    console.log(values);
     if (errors) {
       return;
     } // get values.phone
-
+    const data = {
+      mobile: values.phone,
+      model: '登录',
+      type: 1,
+    };
+    request.post('/register/sms', data).then((res) => {
+      console.log(res);
+    });
     checkRunning(true);
   };
 
   const handleSubmit = async (values, errors) => {
+    console.log('values:', values);
     if (errors) {
       console.log('errors', errors);
       return;
     }
 
-    // if (values.phone) {
-    //   const data = {
-    //     phone: values.phone,
-    //     // eslint-disable-next-line @iceworks/best-practices/no-secret-info
-    //     code: values.code,
-    //     loginType: 2,
-    //   };
-    //   await request.post('/login', data).then(res => {
-    //     console.log(res);
-    //     // if (res.data.success === true) {
-    //     //   Message.success(`登陆成功,token为${res.data.token}`);
-    //     // } else {
-    //     //   Message.success(`${res.msg}`);
-    //     // }
-    //   });
-    // }
+    if (values.phone) {
+      const data = {
+        mobile: values.phone,
+        code: values.code,
+        type: 2,
+      };
+
+      await request.post('/login', data).then((res) => {
+        console.log(res);
+        if (res.data.success === true) {
+          Message.success(`登陆成功,token为${res.data.token}`);
+          window.sessionStorage.setItem('token', res.data.token);
+          history.push('/');
+          return;
+        } else {
+          Message.success('验证码错误');
+          return;
+        }
+      });
+      return;
+    }
 
     const phone = /^[1][3,4,5,7,8][0-9]{9}$/;
 
@@ -143,7 +157,6 @@ const LoginBlock = (
       });
     }
 
-    console.log('values:', values);
     // Message.success('登录成功');
   };
 

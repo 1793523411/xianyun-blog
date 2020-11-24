@@ -11,7 +11,7 @@ const appConfig = {
 
     // eslint-disable-next-line @iceworks/best-practices/no-http-url
     // baseURL: 'http://ice-blog-server.ygjie.icu',
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5005',
     headers: {},
     // ...RequestConfig 其他参数
 

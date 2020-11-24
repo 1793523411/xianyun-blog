@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { Button, Form, Input, Message } from '@alifd/next';
 
 import styles from './index.module.scss';
@@ -10,10 +9,11 @@ const formItemLayout = {
   wrapperCol: { span: 30 },
 };
 
-export default function EmailCode(props) {
+export default function ChangePsd(props) {
   const [isSend, setIsSend] = useState(false);
+  // const [oldpsd, setOldPsd] = useState('');
+  // const [psd, setPsd] = useState('');
   const [second, setSecond] = useState(59);
-
   const handleSubmit = (values, errors) => {
     if (errors) {
       return;
@@ -59,6 +59,12 @@ export default function EmailCode(props) {
 
         <FormItem label="验证码" required asterisk={false}>
           <Input name="code" trim defaultValue="" />
+        </FormItem>
+        <FormItem label="旧密码" required asterisk={false}>
+          <Input name="oldpsd" trim defaultValue="" />
+        </FormItem>
+        <FormItem label="新密码" required asterisk={false}>
+          <Input name="psd" trim defaultValue="" />
         </FormItem>
 
         <FormItem label=" ">

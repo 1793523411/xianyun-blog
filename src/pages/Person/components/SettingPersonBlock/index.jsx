@@ -20,6 +20,7 @@ import store from '@/store';
 
 import { useHistory, request } from 'ice';
 import EmailCode from './EmailCode';
+import ChangePsd from './ChangePsd';
 
 const { Cell } = ResponsiveGrid;
 const FormItem = Form.Item;
@@ -64,6 +65,7 @@ const SettingPersonBlock = (props) => {
   const [selectValueindustry, setSelectValueindustry] = useState('');
 
   const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
 
   useEffect(() => {
     request
@@ -174,6 +176,17 @@ const SettingPersonBlock = (props) => {
     console.log(reason);
 
     setVisible(false);
+    setVisible2(false);
+  };
+
+  const finish = (email) => {
+    setValue({
+      email,
+    });
+  };
+
+  const changepsd = () => {
+    setVisible2(true);
   };
 
   return (
@@ -191,7 +204,7 @@ const SettingPersonBlock = (props) => {
                     <Upload
                       name="pic"
                       // eslint-disable-next-line @iceworks/best-practices/no-http-url
-                      action="http://127.0.0.1:3000/users/upload"
+                      action="http://127.0.0.1:5005/users/upload"
                       // action="http://ice-blog-server.ygjie.icu/users/upload"
                       accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
                       onSuccess={onSuccess}
@@ -216,7 +229,7 @@ const SettingPersonBlock = (props) => {
           {/* <FormItem label="用户id" colSpan={12}>
             <Input className={styles.validateCodeInput} placeholder="" name="userId" disabled />
           </FormItem> */}
-          <FormItem label="昵称" required requiredMessage="必填" colSpan={12}>
+          <FormItem label="昵称" colSpan={12}>
             <Input placeholder="请输入昵称" name="userNickName" />
           </FormItem>
 
@@ -224,7 +237,7 @@ const SettingPersonBlock = (props) => {
             <Input className={styles.validateCodeInput} placeholder="请输入手机" disabled name="phone" />
           </FormItem>
           <FormItem label="邮件" colSpan={12}>
-            {!postData.email ? (
+            {postData.email ? (
               <Input className={styles.validateCodeInput} placeholder="请输入邮件" disabled name="email" />
             ) : (
               <Button type="normal" onClick={onOpen}>
@@ -239,7 +252,7 @@ const SettingPersonBlock = (props) => {
               onCancel={onClose}
               onClose={onClose}
             >
-              <EmailCode />
+              <EmailCode finish={finish} />
             </Dialog>
           </FormItem>
           <FormItem label="真实姓名" colSpan={12}>
@@ -370,6 +383,19 @@ const SettingPersonBlock = (props) => {
               <Form.Submit type="primary" onClick={onSubmit} validate>
                 更新信息
               </Form.Submit>
+              <Form.Submit type="primary" warning onClick={changepsd} validate>
+                修改密码
+              </Form.Submit>
+              <Dialog
+                title="修改密码"
+                visible={visible2}
+                footer={false}
+                onOk={onClose}
+                onCancel={onClose}
+                onClose={onClose}
+              >
+                <ChangePsd finish={finish} />
+              </Dialog>
             </Box>
           </FormItem>
         </Form>
