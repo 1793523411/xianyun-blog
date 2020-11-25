@@ -13,6 +13,7 @@ import {
   Pagination,
   Dialog,
   Message,
+  Switch,
 } from '@alifd/next';
 import styles from './index.module.scss';
 import { useHistory, request } from 'ice';
@@ -42,6 +43,28 @@ const BlogListblock = (props) => {
   const [visible, setVisible] = useState(false);
   const [visibledel, setVisibledel] = useState(false);
   const [currentId, SetCurrentId] = useState(0);
+  const [currentHtml, SetCurrentHtml] = useState(0);
+
+  const [blogName, setBlogName] = useState('');
+  const [title, setTitle] = useState('');
+  const [topPriority, setTopPriority] = useState(0);
+  const [isCreative, setIsCreative] = useState(0);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const [select, setSelect] = useState({
+    filter: [
+      {
+        label: '博客标题',
+        value: '博客标题',
+      },
+      {
+        label: '博客名称',
+        value: '博客名称',
+      },
+    ],
+    value: '',
+  });
   useEffect(() => {
     getList();
     setTimeout(() => {
@@ -50,10 +73,20 @@ const BlogListblock = (props) => {
   }, []);
 
   const getList = () => {
-    request.get('/article/getList/all').then((res) => {
-      console.log(res);
-      SetCard(res.data);
-    });
+    setLoading(true);
+    request
+      .get('/article/getList/all')
+      .then((res) => {
+        if (res.data.success === false) {
+          history.push('/user/login');
+        }
+        console.log(res);
+        SetCard(res.data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        history.push('/user/login');
+      });
   };
 
   const onTagAValueChange = (v) => {
@@ -98,6 +131,178 @@ const BlogListblock = (props) => {
     setVisibledel(false);
   };
 
+  function onChangetopPriority(checked) {
+    // console.log(`switch to ${checked}`);
+    // setTopPriority(checked ? 1 : 0);
+    // if (!topPriority) {
+    setSearchValue('');
+    setIsCreative(0)
+    setLoading(true);
+    request
+      .get('/article/getList/all')
+      .then((res) => {
+        if (res.data.success === false) {
+          history.push('/user/login');
+        }
+        console.log(res);
+        SetCard(res.data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        history.push('/user/login');
+      });
+    // }
+  }
+
+  function onChangeisCreative(checked) {
+    setSearchValue('');
+    console.log(`switch to ${checked}`);
+    // setTimeout(() => {
+    setIsCreative(checked ? 1 : 0);
+    // }, 0);
+    console.log(isCreative);
+    setLoading(true);
+    request
+      .post('/article/filter', {
+        isCreative: checked ? 1 : 0,
+      })
+      .then((res) => {
+        if (res.data.success === false) {
+          history.push('/user/login');
+        }
+        SetCard(res.data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        history.push('/user/login');
+      });
+  }
+
+  const onSearch2 = (value, filterValue) => {
+    setLoading(true);
+    console.log(value, filterValue, isCreative);
+    if (filterValue === '博客标题') {
+      // setBlogName('');
+      // setTitle(value);
+      request
+        .post('/article/filter', {
+          title: value,
+          isCreative,
+        })
+        .then((res) => {
+          if (res.data.success === false) {
+            history.push('/user/login');
+          }
+          SetCard(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          history.push('/user/login');
+        });
+    } else {
+      // setBlogName(value);
+      // setTitle('');
+      request
+        .post('/article/filter', {
+          blogName: value,
+          isCreative,
+        })
+        .then((res) => {
+          if (res.data.success === false) {
+            history.push('/user/login');
+          }
+          SetCard(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          history.push('/user/login');
+        });
+    }
+    // getFilterData();
+  };
+
+  const onChange = (value) => {
+    setSelect({
+      filter: [
+        {
+          label: '博客标题',
+          value: '博客标题',
+        },
+        {
+          label: '博客名称',
+          value: '博客名称',
+        },
+      ],
+      value,
+    });
+  };
+
+  // value is filter value，obj is the search value
+  const onFilterChange = (value) => {
+    console.log(value);
+  };
+
+  const getFilterData = () => {
+    setLoading(true);
+    if (blogName === '') {
+      request
+        .post('/article/filter', {
+          title,
+          isCreative,
+        })
+        .then((res) => {
+          if (res.data.success === false) {
+            history.push('/user/login');
+          }
+          SetCard(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          history.push('/user/login');
+        });
+    } else if (title === '') {
+      request
+        .post('/article/filter', {
+          blogName,
+          isCreative,
+        })
+        .then((res) => {
+          if (res.data.success === false) {
+            history.push('/user/login');
+          }
+          SetCard(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          history.push('/user/login');
+        });
+    } else {
+      request
+        .post('/article/filter', {
+          isCreative,
+        })
+        .then((res) => {
+          if (res.data.success === false) {
+            history.push('/user/login');
+          }
+          SetCard(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          history.push('/user/login');
+        });
+    }
+  };
+
+  const add = () => {
+    history.push('/editor/0/0');
+  };
+
+  const onChange2 = (value) => {
+    console.log(value);
+    setSearchValue(value);
+  };
+
   const renderCards = () => {
     return card.map((c, i) => (
       <div className={styles.ListItem} key={i}>
@@ -116,8 +321,26 @@ const BlogListblock = (props) => {
                   .slice(0, 80)}
                 ···
               </div>
-              {/* <div className={styles.subContent}>{c.subContent}</div> */}
               <div className={styles.subContent}>博客名称：{c.blogName}</div>
+              <br />
+              <div className={styles.subContent}>
+                时间：{c.updateTime ? c.updateTime.slice(0, -8) : c.createTime.slice(0, -8)} &nbsp;&nbsp; &nbsp;&nbsp;
+                {c.isCreative ? (
+                  <Tag key={'p_n_blue'} type="normal" color="blue" size="small">
+                    原创
+                  </Tag>
+                ) : (
+                  ''
+                )}
+                &nbsp;&nbsp;
+                {c.topPriority ? (
+                  <Tag key={'p_n_orange'} type="normal" color="orange" size="small">
+                    置顶
+                  </Tag>
+                ) : (
+                  ''
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.right}>
@@ -125,7 +348,7 @@ const BlogListblock = (props) => {
               type="primary"
               text
               onClick={() => {
-                history.push('/editor/' + c.id);
+                history.push('/editor/' + c.url + '/' + c.uniqueId);
               }}
             >
               编辑
@@ -136,6 +359,7 @@ const BlogListblock = (props) => {
               onClick={() => {
                 console.log(c.formatContent);
                 setVisible(true);
+                SetCurrentHtml(c.formatContent);
               }}
             >
               预览
@@ -178,7 +402,7 @@ const BlogListblock = (props) => {
               height="85vh"
             >
               <div style={{ width: '150vh' }}>
-                <div dangerouslySetInnerHTML={{ __html: c.formatContent }} className={styles.htmlContent}></div>
+                <div dangerouslySetInnerHTML={{ __html: currentHtml }} className={styles.htmlContent}></div>
               </div>
             </Dialog>
           </div>
@@ -190,8 +414,47 @@ const BlogListblock = (props) => {
   return (
     <>
       <Card free className={styles.BasicList}>
-        <Box align="center">
-          <Search type="primary" hasIcon={false} searchText="搜索" onSearch={onSearchClick} />
+        {/* <Box align="center" direction="row" spacing={20} justify="center">
+          <Search type="primary" hasIcon={false} onSearch={onSearchClick} />
+          <Switch
+            checkedChildren="置顶"
+            className={styles.largeWidth}
+            onChange={onChangetopPriority}
+            unCheckedChildren="不置顶"
+            checked={topPriority ? 1 : 0}
+          />
+        </Box>
+        <br /> */}
+        <Box align="center" direction="row" spacing={20} justify="center">
+          <Button type="primary" onClick={onChangetopPriority}>
+            <Icon type="eye" />
+            显示所有
+          </Button>{' '}
+          &nbsp;&nbsp;
+          <Search
+            // onChange={this.onChange.bind(this)}
+            onSearch={onSearch2}
+            filterProps={{ autoWidth: false }}
+            defaultFilterValue="博客名称"
+            filter={select.filter}
+            onFilterChange={onFilterChange}
+            value={searchValue}
+            onChange={onChange2}
+          />
+          {/* <Switch
+            checkedChildren="显示所有"
+            className={styles.largeWidth}
+            onChange={onChangetopPriority}
+            unCheckedChildren="显示所有"
+            checked={topPriority ? 1 : 0}
+          /> */}
+          <Switch
+            checkedChildren="只看非原创"
+            className={styles.largeWidth}
+            onChange={onChangeisCreative}
+            unCheckedChildren="只看原创"
+            checked={isCreative ? 1 : 0}
+          />
         </Box>
         <Divider
           dashed
@@ -212,12 +475,12 @@ const BlogListblock = (props) => {
 
         <Loading visible={loading} className={styles.MainList}>
           <Box className={styles.MainContent} spacing={10}>
-            {/* <div className={styles.ListItem}>
-              <div className={styles.add}>
+            <div className={styles.ListItem}>
+              <div className={styles.add} onClick={add}>
                 <Icon type="add" className={styles.icon} size="xs" />
-                <div className={styles.addText}>添加内容</div>
+                <div className={styles.addText}>添加文章</div>
               </div>
-            </div> */}
+            </div>
             {renderCards()}
             {/* <Box margin={[15, 0, 0, 0]} direction="row" align="center" justify="space-between">
               <div className={styles.total}>

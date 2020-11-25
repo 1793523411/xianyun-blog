@@ -194,7 +194,7 @@ const routerConfig = [
         component: Person,
       },
       {
-        path: '/editor/:id',
+        path: '/editor/:url/:uniqueId',
         component: Editor,
       },
       {

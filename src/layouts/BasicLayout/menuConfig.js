@@ -177,10 +177,10 @@ const asideMenuConfig = [
     path: '/',
     icon: 'edit',
     children: [
-      {
-        name: '编辑文章',
-        path: '/editor/0',
-      },
+      // {
+      //   name: '编辑文章',
+      //   path: '/editor/0/0',
+      // },
       {
         name: '文章列表',
         path: '/bloglist',

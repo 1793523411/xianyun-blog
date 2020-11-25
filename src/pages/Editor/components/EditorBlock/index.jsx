@@ -13,19 +13,29 @@ const EditorBlock = (props) => {
   const [summary, setContent] = useState('');
   const [formatContent, setHtmlContent] = useState('');
   const [topPriority, setTopPriority] = useState(0);
-  const [isCreative, setIsCreative] = useState(0);
+  const [isCreative, setIsCreative] = useState(1);
+  const [id, setId] = useState(0);
   const history = useHistory();
 
-  const { id } = useParams();
+  const { url, uniqueId } = useParams();
   useEffect(() => {
     // if (location.href.indexOf('#reloaded') == -1) {
     //   location.href = location.href + '#reloaded';
     //   location.reload();
     // }
-    console.log(id);
-    if (id > 0) {
-      request.post('/article/getById', { id }).then((res) => {
+    console.log(url);
+    console.log(uniqueId);
+    if (uniqueId > 0 && url !== 0) {
+      console.log('111');
+      request.post('/article/getById', { url, uniqueId }).then((res) => {
         console.log(res);
+        setBlogName(res.data.blogName);
+        setTitle(res.data.title);
+        setContent(res.data.summary);
+        setHtmlContent(res.data.formatContent);
+        setTopPriority(res.data.topPriority);
+        setIsCreative(res.data.isCreative);
+        setId(res.data.id);
       });
     }
   }, []);
@@ -78,10 +88,33 @@ const EditorBlock = (props) => {
     console.log(`switch to ${checked}`);
     setIsCreative(checked ? 1 : 0);
   }
-  const submit = () => {
+  const submit = async () => {
     if (!blogName || !title || !summary) {
       Message.warning('请将信息填写完整');
       return;
+    }
+    if (uniqueId > 0 && url !== 0) {
+      const res = await request.post('/article/update', {
+        id,
+        blogName,
+        title,
+        summary,
+        formatContent,
+        topPriority,
+        isCreative,
+        Token: window.sessionStorage.getItem('token'),
+      });
+      // .then((res) => {
+      Message.success('修改成功');
+      console.log(res);
+      setBlogName('');
+      setTitle('');
+      setContent('');
+      setHtmlContent('');
+      setTopPriority(0);
+      setIsCreative(0);
+      return;
+      // });
     }
     console.log({
       blogName,
@@ -102,14 +135,18 @@ const EditorBlock = (props) => {
         Token: window.sessionStorage.getItem('token'),
       })
       .then((res) => {
-        Message.success('添加成功');
-        console.log(res);
-        setBlogName('');
-        setTitle('');
-        setContent('');
-        setHtmlContent('');
-        setTopPriority(0);
-        setIsCreative(0);
+        if (res.data.success) {
+          Message.success('添加成功');
+          console.log(res);
+          setBlogName('');
+          setTitle('');
+          setContent('');
+          setHtmlContent('');
+          setTopPriority(0);
+          setIsCreative(0);
+        } else {
+          Message.warning(res.data.msg);
+        }
       });
   };
   return (
@@ -155,12 +192,14 @@ const EditorBlock = (props) => {
           className={styles.largeWidth}
           onChange={onChangetopPriority}
           unCheckedChildren="不置顶"
+          checked={topPriority ? 1 : 0}
         />
         <Switch
           checkedChildren="原创"
           className={styles.largeWidth}
           onChange={onChangeisCreative}
           unCheckedChildren="非原创"
+          checked={isCreative ? 1 : 0}
         />
       </div>
       <br />

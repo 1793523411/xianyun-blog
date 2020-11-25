@@ -165,12 +165,12 @@ const LoginBlock = (
       <Item format="tel" required requiredMessage="必填" asterisk={false}>
         <Input
           name="phone"
-          innerBefore={
-            <span className={styles.innerBeforeInput}>
-              +86
-              <span className={styles.line} />
-            </span>
-          }
+          // innerBefore={
+          //   <span className={styles.innerBeforeInput}>
+          //     +86
+          //     <span className={styles.line} />
+          //   </span>
+          // }
           maxLength={20}
           placeholder="手机号"
         />

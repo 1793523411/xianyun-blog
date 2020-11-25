@@ -80,12 +80,12 @@
   }
   .content {
     margin: 12px 0;
-    color: #999;
+    color: rgb(59, 59, 59);
     font-size: 12px;
   }
   .subContent {
     color: #999;
-    font-size: 12px;
+    font-size: 15px;
   }
   .add {
     display: flex;
@@ -97,6 +97,7 @@
     background: #fff;
     border: 1px dashed #eee;
     border-radius: 5px;
+    cursor: pointer;
     .icon {
       color: #999;
     }
@@ -106,5 +107,12 @@
     color: #999;
     font-size: 12px;
     text-align: center;
+
   }
+}
+.largeWidth{
+  width: 110px;
+  margin-left: 20px;
+  // line-height: 38px;
+  margin-top: 0;
 }
