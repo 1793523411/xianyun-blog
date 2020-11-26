@@ -54,10 +54,10 @@ const BlogListblock = (props) => {
 
   const [select, setSelect] = useState({
     filter: [
-      {
-        label: '博客标题',
-        value: '博客标题',
-      },
+      // {
+      //   label: '博客标题',
+      //   value: '博客标题',
+      // },
       {
         label: '博客名称',
         value: '博客名称',
@@ -136,7 +136,7 @@ const BlogListblock = (props) => {
     // setTopPriority(checked ? 1 : 0);
     // if (!topPriority) {
     setSearchValue('');
-    setIsCreative(0)
+    setIsCreative(0);
     setLoading(true);
     request
       .get('/article/getList/all')
@@ -224,10 +224,10 @@ const BlogListblock = (props) => {
   const onChange = (value) => {
     setSelect({
       filter: [
-        {
-          label: '博客标题',
-          value: '博客标题',
-        },
+        // {
+        //   label: '博客标题',
+        //   value: '博客标题',
+        // },
         {
           label: '博客名称',
           value: '博客名称',
@@ -313,7 +313,7 @@ const BlogListblock = (props) => {
               alt="img"
             /> */}
             <div>
-              <div className={styles.title}>{c.title}</div>
+              <div className={styles.title}>{c.blogName}</div>
               <div className={styles.content}>
                 {c.summary
                   .replace(/[\\\`\*\_\[\]\#\+\-\!\>]/g, '')
@@ -321,7 +321,7 @@ const BlogListblock = (props) => {
                   .slice(0, 80)}
                 ···
               </div>
-              <div className={styles.subContent}>博客名称：{c.blogName}</div>
+              {/* <div className={styles.subContent}>博客名称：{c.blogName}</div> */}
               <br />
               <div className={styles.subContent}>
                 时间：{c.updateTime ? c.updateTime.slice(0, -8) : c.createTime.slice(0, -8)} &nbsp;&nbsp; &nbsp;&nbsp;
@@ -433,10 +433,11 @@ const BlogListblock = (props) => {
           &nbsp;&nbsp;
           <Search
             // onChange={this.onChange.bind(this)}
+            hasArrow={false}
             onSearch={onSearch2}
             filterProps={{ autoWidth: false }}
             defaultFilterValue="博客名称"
-            filter={select.filter}
+            // filter={select.filter}
             onFilterChange={onFilterChange}
             value={searchValue}
             onChange={onChange2}

@@ -4,10 +4,19 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" />
-    <title>Fusion Design Pro - JS</title>
+    <title>闲云</title>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
   </head>
 
   <body>
     <div id="ice-container"></div>
+    <script>
+      var ip = returnCitySN["cip"]
+      var address = returnCitySN["cname"]
+      console.log("ip:"+ip)
+      console.log("address:"+address)
+      window.sessionStorage.setItem('ip', ip);
+      // console.log(returnCitySN)
+    </script>
   </body>
 </html>

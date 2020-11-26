@@ -67,6 +67,7 @@ const SettingPersonBlock = (props) => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
 
+
   useEffect(() => {
     request
       .get('/user/info')
@@ -204,8 +205,8 @@ const SettingPersonBlock = (props) => {
                     <Upload
                       name="pic"
                       // eslint-disable-next-line @iceworks/best-practices/no-http-url
-                      action="http://127.0.0.1:5005/users/upload"
-                      // action="http://ice-blog-server.ygjie.icu/users/upload"
+                      // action="http://127.0.0.1:5005/users/upload"
+                      action="http://ice-blog-server.ygjie.icu/users/upload"
                       accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
                       onSuccess={onSuccess}
                     >
@@ -237,13 +238,32 @@ const SettingPersonBlock = (props) => {
             <Input className={styles.validateCodeInput} placeholder="请输入手机" disabled name="phone" />
           </FormItem>
           <FormItem label="邮件" colSpan={12}>
-            {postData.email ? (
+            {/* {postData.email ? (
               <Input className={styles.validateCodeInput} placeholder="请输入邮件" disabled name="email" />
             ) : (
               <Button type="normal" onClick={onOpen}>
                 绑定邮箱
               </Button>
-            )}
+            )} */}
+            <Box spacing={5} direction="row">
+              <Input
+                className={styles.validateCodeInput}
+                placeholder="请输入邮件"
+                disabled
+                name="email"
+                value={postData.email}
+              />{' '}
+              {postData.email ? (
+                <Button type="normal" onClick={onOpen}>
+                  修改邮箱
+                </Button>
+              ) : (
+                <Button type="normal" onClick={onOpen}>
+                  绑定邮箱
+                </Button>
+              )}
+            </Box>
+
             <Dialog
               title="绑定邮箱"
               visible={visible}

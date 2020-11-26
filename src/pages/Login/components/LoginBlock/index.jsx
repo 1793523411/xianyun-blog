@@ -31,6 +31,8 @@ const LoginBlock = (
     //   location.href = location.href + '#reloaded';
     //   location.reload();
     // }
+    console.log(ip);
+    console.log(address);
   }, [1]);
 
   const history = useHistory();
@@ -59,6 +61,7 @@ const LoginBlock = (
       mobile: values.phone,
       model: '登录',
       type: 1,
+      ip,
     };
     request.post('/register/sms', data).then((res) => {
       console.log(res);
@@ -125,6 +128,7 @@ const LoginBlock = (
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
         password: values.password,
         loginType: 3,
+        ip: window.sessionStorage.getItem('ip')
       };
       await request.post('/login', data).then((res) => {
         console.log(res);

@@ -19,7 +19,7 @@ export default function ChangePsd(props) {
       return;
     }
     //todo 校验+绑定邮箱，然后与父组件通信
-    props.finish(values.email);
+    // props.finish(values.email);
     console.log('Get form value:', values);
     Message.success('请前往邮箱确认');
   };
@@ -38,7 +38,7 @@ export default function ChangePsd(props) {
   return (
     <>
       <Form style={{ width: 400 }} {...formItemLayout} labelTextAlign="left" size="medium" labelAlign="inset">
-        <FormItem label="邮箱" format="email" required asterisk={false}>
+        {/* <FormItem label="邮箱" format="email" required asterisk={false}>
           <Input
             name="email"
             trim
@@ -55,16 +55,19 @@ export default function ChangePsd(props) {
               </Form.Submit>
             }
           />
-        </FormItem>
+        </FormItem> */}
 
-        <FormItem label="验证码" required asterisk={false}>
+        {/* <FormItem label="验证码" required asterisk={false}>
           <Input name="code" trim defaultValue="" />
-        </FormItem>
+        </FormItem> */}
         <FormItem label="旧密码" required asterisk={false}>
-          <Input name="oldpsd" trim defaultValue="" />
+          <Input name="oldpsd" htmlType="password" trim defaultValue="" />
         </FormItem>
         <FormItem label="新密码" required asterisk={false}>
-          <Input name="psd" trim defaultValue="" />
+          <Input name="psd" htmlType="password" trim defaultValue="" />
+        </FormItem>
+        <FormItem label="确认密码" required asterisk={false}>
+          <Input name="psd2" htmlType="password" trim defaultValue="" />
         </FormItem>
 
         <FormItem label=" ">

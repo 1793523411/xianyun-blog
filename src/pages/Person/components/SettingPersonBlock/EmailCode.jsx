@@ -21,7 +21,7 @@ export default function EmailCode(props) {
     //todo 校验+绑定邮箱，然后与父组件通信
     props.finish(values.email);
     console.log('Get form value:', values);
-    Message.success('请前往邮箱确认');
+
   };
 
   const sendCode = (values, errors) => {
@@ -29,6 +29,7 @@ export default function EmailCode(props) {
     if (errors) {
       return;
     }
+    Message.success('邮件已发送，请前往邮箱确认');
     //todo 发送验证码
     setInterval(() => {
       setSecond(second - 1);
@@ -51,15 +52,15 @@ export default function EmailCode(props) {
                 onClick={sendCode}
                 style={{ marginRight: 10 }}
               >
-                {isSend ? `${second}秒后再试` : '获取验证码'}
+                {isSend ? `${second}秒后再试` : '验证'}
               </Form.Submit>
             }
           />
         </FormItem>
 
-        <FormItem label="验证码" required asterisk={false}>
+        {/* <FormItem label="验证码" required asterisk={false}>
           <Input name="code" trim defaultValue="" />
-        </FormItem>
+        </FormItem> */}
 
         <FormItem label=" ">
           <Form.Submit style={{ width: '100%' }} type="primary" validate onClick={handleSubmit}>

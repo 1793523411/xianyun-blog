@@ -89,7 +89,7 @@ const EditorBlock = (props) => {
     setIsCreative(checked ? 1 : 0);
   }
   const submit = async () => {
-    if (!blogName || !title || !summary) {
+    if (!blogName || !summary) {
       Message.warning('请将信息填写完整');
       return;
     }
@@ -97,7 +97,7 @@ const EditorBlock = (props) => {
       const res = await request.post('/article/update', {
         id,
         blogName,
-        title,
+        // title,
         summary,
         formatContent,
         topPriority,
@@ -118,7 +118,7 @@ const EditorBlock = (props) => {
     }
     console.log({
       blogName,
-      title,
+      // title,
       summary,
       formatContent,
       topPriority,
@@ -127,7 +127,7 @@ const EditorBlock = (props) => {
     request
       .post('/article/add', {
         blogName,
-        title,
+        // title,
         summary,
         formatContent,
         topPriority,
@@ -151,42 +151,18 @@ const EditorBlock = (props) => {
   };
   return (
     <div>
-      <Input
-        addonTextBefore="博客名称"
-        size="medium"
-        value={blogName}
-        maxLength={100}
-        onChange={onChangeBlogName}
-        hasLimitHint
-        style={{ width: '49%', paddingLeft: '1%' }}
-        aria-label="style width 400"
-      />
-      <br />
-      <br />
-      <Input
-        addonTextBefore="博客标题"
-        size="medium"
-        value={title}
-        maxLength={100}
-        onChange={onChangeTitle}
-        hasLimitHint
-        style={{ width: '49%', paddingLeft: '1%' }}
-        aria-label="style width 400"
-      />
-      <br />
-      <br />
-      <Box direction="row" justify="center" padding={10}>
-        <Input.TextArea
-          onChange={onChangeContent}
-          aria-label="auto height"
-          autoHeight={{ minRows: 25, maxRows: 999999 }}
-          style={{ width: '50%', marginRight: '2%' }}
-          value={summary}
+      <Box direction="row" align="center" padding={10} className="box">
+        <Input
+          addonTextBefore="博客名称"
+          size="medium"
+          value={blogName}
+          maxLength={100}
+          onChange={onChangeBlogName}
+          hasLimitHint
+          style={{ width: '49%', paddingLeft: '-2%' }}
+          aria-label="style width 400"
         />
-        <div dangerouslySetInnerHTML={{ __html: formatContent }} className={styles.htmlContent}></div>
-      </Box>
-      <br />
-      <div style={{ marginLeft: '-1%' }}>
+        {/* <div className={styles.switch}> */}
         <Switch
           checkedChildren="置顶"
           className={styles.largeWidth}
@@ -201,11 +177,47 @@ const EditorBlock = (props) => {
           unCheckedChildren="非原创"
           checked={isCreative ? 1 : 0}
         />
-      </div>
+        {/* </div> */}
+      </Box>
+      {/* <Input
+        addonTextBefore="博客标题"
+        size="medium"
+        value={title}
+        maxLength={100}
+        onChange={onChangeTitle}
+        hasLimitHint
+        style={{ width: '49%', paddingLeft: '1%' }}
+        aria-label="style width 400"
+      />
       <br />
-      <Button type="primary" style={{ marginLeft: '1%' }} onClick={submit}>
-        提交
-      </Button>
+      <br /> */}
+      <Box direction="row" justify="center" padding={10}>
+        <Input.TextArea
+          onChange={onChangeContent}
+          aria-label="auto height"
+          autoHeight={{ minRows: 25, maxRows: 999999 }}
+          style={{ width: '50%', marginRight: '2%' }}
+          value={summary}
+        />
+        <div dangerouslySetInnerHTML={{ __html: formatContent }} className={styles.htmlContent}></div>
+      </Box>
+      {/* <div style={{ marginLeft: '-1%' }}></div> */}
+      <Box direction="row" justify="center" padding={20}>
+        <Button type="primary"  onClick={submit}>
+          提交
+        </Button>
+        <div style={{ width: '6vh' }}></div>
+        <Button
+          type="primary"
+          warning
+          // style={{ marginLeft: '0%' }}
+          onClick={() => {
+            history.push('/bloglist');
+          }}
+        >
+          返回
+        </Button>
+      </Box>
     </div>
   );
 };
