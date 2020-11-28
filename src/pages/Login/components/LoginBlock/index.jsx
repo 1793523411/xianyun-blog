@@ -80,7 +80,8 @@ const LoginBlock = (
       const data = {
         mobile: values.phone,
         code: values.code,
-        type: 2,
+        loginType: 2,
+        ip: window.sessionStorage.getItem('ip')
       };
 
       await request.post('/login', data).then((res) => {
@@ -110,6 +111,7 @@ const LoginBlock = (
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
         password: values.password,
         loginType: 1,
+        ip: window.sessionStorage.getItem('ip')
       };
       await request.post('/login', data).then((res) => {
         console.log(res);
@@ -148,6 +150,7 @@ const LoginBlock = (
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
         password: values.password,
         loginType: 0,
+        ip: window.sessionStorage.getItem('ip')
       };
       await request.post('/login', data).then((res) => {
         console.log(res);

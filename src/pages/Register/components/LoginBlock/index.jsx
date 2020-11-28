@@ -84,13 +84,13 @@ export default function RegisterBlock() {
       return;
     }
     console.log(values);
-    if (values.phone) {
+    if (values.mobile) {
       Message.success('电话注册');
       const data = {
         mobile: values.mobile,
         model: '注册',
         code: values.code,
-        type: 1,
+        type: 0,
       };
 
       await request.post('/register/sms/check', data).then((res) => {

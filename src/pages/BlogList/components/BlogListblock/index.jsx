@@ -77,15 +77,16 @@ const BlogListblock = (props) => {
     request
       .get('/article/getList/all')
       .then((res) => {
-        if (res.data.success === false) {
-          history.push('/user/login');
-        }
+        // if (res.data.success === false) {
+        //   history.push('/user/login');
+        // }
         console.log(res);
-        SetCard(res.data);
+        // SetCard(res.data);
+        SetCard(res.rows);
         setLoading(false);
       })
       .catch((e) => {
-        history.push('/user/login');
+        // history.push('/user/login');
       });
   };
 

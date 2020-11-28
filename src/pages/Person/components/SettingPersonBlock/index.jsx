@@ -75,6 +75,7 @@ const SettingPersonBlock = (props) => {
         console.log(res.data);
         setValue({
           userNickName: res.data.userNickName,
+          userName: res.data.userName,
           phone: res.data.phone,
           email: res.data.email,
           userId: res.data.userId,
@@ -232,6 +233,9 @@ const SettingPersonBlock = (props) => {
           </FormItem> */}
           <FormItem label="昵称" colSpan={12}>
             <Input placeholder="请输入昵称" name="userNickName" />
+          </FormItem>
+          <FormItem label="用户名(用于登录)" colSpan={12}>
+            <Input placeholder="请输入用户名" name="userName" />
           </FormItem>
 
           <FormItem label="手机：" colSpan={12}>
