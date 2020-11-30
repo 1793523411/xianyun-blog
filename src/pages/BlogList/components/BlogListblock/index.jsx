@@ -28,20 +28,6 @@ const endValue = moment('2017-12-15', 'YYYY-MM-DD', true);
 
 const Option = Select.Option;
 
-const onChangetype = function (value) {
-  console.log(value);
-  request
-    .post('/article/filter', {
-      isCreative: value === '原创' ? 1 : 0,
-    })
-    .then((res) => {
-      console.log(res.rows);
-    });
-};
-const onChangezhuanlan = function (value) {
-  console.log(value);
-};
-
 const BlogListblock = (props) => {
   const history = useHistory();
 
@@ -128,7 +114,25 @@ const BlogListblock = (props) => {
     console.log(formatDate(val._d));
   };
 
+  const onChangetype = function (value) {
+    setLoading(true);
+    console.log(value);
+    request
+      .post('/article/filter', {
+        isCreative: value === '原创' ? 1 : 0,
+      })
+      .then((res) => {
+        console.log(res.rows);
+        SetCard(res.rows);
+        setLoading(false);
+        setTotal(res.rows.length);
+      });
+  };
+  const onChangezhuanlan = function (value) {
+    console.log(value);
+  };
   const search = () => {
+    setLoading(true);
     console.log(searchValue);
     request
       .post('/article/filter', {
@@ -136,6 +140,9 @@ const BlogListblock = (props) => {
       })
       .then((res) => {
         console.log(res.rows);
+        SetCard(res.rows);
+        setTotal(res.rows.length);
+        setLoading(false);
       });
   };
 

@@ -239,7 +239,7 @@ const EditorBlock = (props) => {
           warning
           // style={{ marginLeft: '0%' }}
           onClick={() => {
-            history.push('/bloglist');
+            history.go(-1);
           }}
         >
           返回
