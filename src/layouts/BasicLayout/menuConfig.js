@@ -115,21 +115,21 @@ const asideMenuConfig = [
       },
     ],
   },
-  // {
-  //   name: '详情页面',
-  //   path: '/',
-  //   icon: 'calendar',
-  //   children: [
-  //     {
-  //       name: '基础详情',
-  //       path: '/detail/basic',
-  //     },
-  //     {
-  //       name: '高级详情',
-  //       path: '/detail/advanced',
-  //     },
-  //   ],
-  // },
+  {
+    name: '详情页面',
+    path: '/',
+    icon: 'calendar',
+    children: [
+      {
+        name: '基础详情',
+        path: '/detail/basic',
+      },
+      {
+        name: '高级详情',
+        path: '/detail/advanced',
+      },
+    ],
+  },
   // {
   //   name: '结果&缺省',
   //   path: '/',

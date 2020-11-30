@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Box, Switch, Button, Message } from '@alifd/next';
+import { Input, Box, Switch, Button, Message, Select } from '@alifd/next';
 import styles from './index.module.scss';
 import marked from 'marked';
 import hljs from 'highlight.js';
@@ -149,6 +149,19 @@ const EditorBlock = (props) => {
         }
       });
   };
+
+  const dataSource1 = [
+    { value: '10001', label: '已有的专栏1' },
+    { value: '10002', label: '已有的专栏2' },
+  ];
+  const dataSource2 = [
+    { value: '10001', label: '已有的标签1' },
+    { value: '10002', label: '已有的标签2' },
+  ];
+
+  function handleChange(value) {
+    console.log(value);
+  }
   return (
     <div>
       <Box direction="row" align="center" padding={10} className="box">
@@ -179,18 +192,7 @@ const EditorBlock = (props) => {
         />
         {/* </div> */}
       </Box>
-      {/* <Input
-        addonTextBefore="博客标题"
-        size="medium"
-        value={title}
-        maxLength={100}
-        onChange={onChangeTitle}
-        hasLimitHint
-        style={{ width: '49%', paddingLeft: '1%' }}
-        aria-label="style width 400"
-      />
-      <br />
-      <br /> */}
+
       <Box direction="row" justify="center" padding={10}>
         <Input.TextArea
           onChange={onChangeContent}
@@ -202,8 +204,33 @@ const EditorBlock = (props) => {
         <div dangerouslySetInnerHTML={{ __html: formatContent }} className={styles.htmlContent}></div>
       </Box>
       {/* <div style={{ marginLeft: '-1%' }}></div> */}
+      <Box direction="row" justify="flex-start" padding={10}>
+        <div style={{ lineHeight: '30px' }}>
+          专栏：
+          <Select
+            aria-label="tag mode"
+            mode="tag"
+            defaultValue={[]}
+            onChange={handleChange}
+            dataSource={dataSource1}
+            style={{ width: 300 }}
+          />
+        </div>
+        <div style={{ width: '6vh' }}></div>
+        <div style={{ lineHeight: '30px' }}>
+          标签：
+          <Select
+            aria-label="tag mode"
+            mode="tag"
+            defaultValue={[]}
+            onChange={handleChange}
+            dataSource={dataSource2}
+            style={{ width: 300 }}
+          />
+        </div>
+      </Box>
       <Box direction="row" justify="center" padding={20}>
-        <Button type="primary"  onClick={submit}>
+        <Button type="primary" onClick={submit}>
           提交
         </Button>
         <div style={{ width: '6vh' }}></div>

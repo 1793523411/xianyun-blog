@@ -37,6 +37,7 @@ import Settings from '@/pages/Settings';
 import Person from '@/pages/Person';
 import Editor from '@/pages/Editor';
 import BlogList from '@/pages/BlogList';
+import ArticleDetail from './pages/ArticleDetail';
 
 const routerConfig = [
   {
@@ -200,6 +201,10 @@ const routerConfig = [
       {
         path: '/bloglist',
         component: BlogList,
+      },
+      {
+        path: '/article/:url/:uniqueId',
+        component: ArticleDetail,
       },
       {
         path: '/',

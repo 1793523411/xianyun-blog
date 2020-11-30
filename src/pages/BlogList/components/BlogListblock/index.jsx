@@ -22,17 +22,24 @@ import styles from './index.module.scss';
 import { useHistory, request } from 'ice';
 
 import moment from 'moment';
-const { RangePicker, MonthPicker, YearPicker } = DatePicker;
+const { RangePicker, MonthPicker, YearPicker, WeekPicker } = DatePicker;
 const startValue = moment('2017-11-20', 'YYYY-MM-DD', true);
 const endValue = moment('2017-12-15', 'YYYY-MM-DD', true);
-const onChangedata = (val) => console.log(val);
 
 const Option = Select.Option;
+
 const onChangetype = function (value) {
   console.log(value);
+  request
+    .post('/article/filter', {
+      isCreative: value === '原创' ? 1 : 0,
+    })
+    .then((res) => {
+      console.log(res.rows);
+    });
 };
-const onBlurtype = function (e) {
-  console.log(/onblur/, e);
+const onChangezhuanlan = function (value) {
+  console.log(value);
 };
 
 const BlogListblock = (props) => {
@@ -45,6 +52,10 @@ const BlogListblock = (props) => {
   const [visibledel, setVisibledel] = useState(false);
   const [currentId, SetCurrentId] = useState(0);
   const [currentHtml, SetCurrentHtml] = useState(0);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     getList();
@@ -65,13 +76,15 @@ const BlogListblock = (props) => {
         // SetCard(res.data);
         SetCard(res.rows);
         setLoading(false);
+        setTotal(res.total);
       })
       .catch((e) => {
         // history.push('/user/login');
       });
   };
 
-  const onPaginationChange = () => {
+  const onPaginationChange = (v) => {
+    console.log(v);
     setLoading(true);
     setLoading(false);
   };
@@ -87,9 +100,44 @@ const BlogListblock = (props) => {
     history.push('/editor/0/0');
   };
 
-  function onChangesearch(v) {
-    console.log(v);
-  }
+  const onChangedata = (val) => {
+    console.log(val);
+  };
+
+  const formatDate = (date) => {
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1;
+    m = m < 10 ? `0${m}` : m;
+    let d = date.getDate();
+    d = d < 10 ? `0${d}` : d;
+    return `${y}-${m}-${d}`;
+  };
+  const onChangestartValue = (val) => {
+    console.log(formatDate(val._d));
+    //todo 根据时间查询
+    // request
+    //   .post('/article/filter', {
+    //     blogName: searchValue,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.rows);
+    //   });
+  };
+  const onChangeEndValue = (val) => {
+    //todo 根据时间查询
+    console.log(formatDate(val._d));
+  };
+
+  const search = () => {
+    console.log(searchValue);
+    request
+      .post('/article/filter', {
+        blogName: searchValue,
+      })
+      .then((res) => {
+        console.log(res.rows);
+      });
+  };
 
   const renderCards = () => {
     return card.map((c, i) => (
@@ -101,7 +149,15 @@ const BlogListblock = (props) => {
               alt="img"
             /> */}
             <div>
-              <div className={styles.title}>{c.blogName}</div>
+              <div
+                className={styles.title}
+                onClick={() => {
+                  console.log(c.id);
+                  history.push(`/article/${c.url}/${c.uniqueId}`);
+                }}
+              >
+                {c.blogName}
+              </div>
               {/* 这是文章内容的一部分不显示了 */}
               {/* <div className={styles.content}>
                 {c.summary
@@ -115,19 +171,22 @@ const BlogListblock = (props) => {
 
               <div className={styles.subContent}>
                 <Box align="center" direction="row" spacing={20} justify="center">
-                  <div>原创</div>
-                  <div>2020年3月223日 22:20:07</div>
-                  {/* <div>
+                  <div>{c.isCreative === 1 ? '原创' : <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>}</div>
+                  <div>{c.updateTime ? c.updateTime : c.createTime}</div>
+                  <div>
                     <Icon type="eye" />
-                    50
-                  </div> */}
+                    &nbsp;
+                    {c.visits}
+                  </div>
                   <div>
                     <Icon type="atm" size="small" />
+                    &nbsp;
                     <span>10</span>
                   </div>
-                  <div style={{ margin: 'auto' }}>
+                  <div>
                     <Icon type="favorites-filling" size="small" />
-                    <span style={{ marginTop: 5 }}>15</span>
+                    &nbsp;
+                    <span style={{ marginTop: 5 }}>{c.likes}</span>
                   </div>
                 </Box>
               </div>
@@ -138,7 +197,7 @@ const BlogListblock = (props) => {
               type="primary"
               text
               onClick={() => {
-                history.push('/editor/' + c.url + '/' + c.uniqueId);
+                history.push(`/editor/${c.url}/${c.uniqueId}`);
               }}
             >
               编辑
@@ -206,14 +265,27 @@ const BlogListblock = (props) => {
   return (
     <>
       <Card free className={styles.BasicList}>
-        <Box align="center" direction="row" spacing={30} justify="center">
+        <Box align="center" direction="row" spacing={10} justify="center">
           筛选：
-          <RangePicker defaultValue={[startValue, endValue]} onChange={onChangedata} />
+          {/* <RangePicker style={{ width: 250 }} defaultValue={[startValue, endValue]} onOk={onChangedata} /> */}
+          <DatePicker onChange={onChangestartValue} />
+          <DatePicker onChange={onChangeEndValue} />
           <Select
             id="basic-demo"
-            style={{width: 250}}
+            style={{ width: 120 }}
             onChange={onChangetype}
-            onBlur={onBlurtype}
+            defaultValue="文章类型"
+            aria-label="name is"
+            showSearch
+            hasClear
+          >
+            <Option value="原创">原创</Option>
+            <Option value="转载">转载</Option>
+          </Select>
+          <Select
+            id="basic-demo"
+            style={{ width: 200 }}
+            onChange={onChangezhuanlan}
             defaultValue="分类专栏"
             aria-label="name is"
             showSearch
@@ -223,9 +295,17 @@ const BlogListblock = (props) => {
             <Option value="frank">Frank</Option>
             <Option value="hugo">Hugo</Option>
           </Select>
-          <div style={{ width: '10vh' }}></div>
-          <Input size="medium" placeholder="输入关键词" onChange={onChangesearch} aria-label="Medium" />
-          <Button type="primary">搜索</Button>
+          <div style={{ width: '3vh' }}></div>
+          <Input
+            size="medium"
+            placeholder="输入关键词"
+            onChange={(v) => setSearchValue(v)}
+            aria-label="Medium"
+            value={searchValue}
+          />
+          <Button type="primary" onClick={() => search()}>
+            搜索
+          </Button>
         </Box>
         <Divider
           dashed
@@ -244,9 +324,9 @@ const BlogListblock = (props) => {
             {renderCards()}
             <Box margin={[15, 0, 0, 0]} direction="row" align="center" justify="space-between">
               <div className={styles.total}>
-                共<span>200</span>条需求
+                共<span>{total}</span>篇文章
               </div>
-              <Pagination onChange={onPaginationChange} />
+              <Pagination onChange={onPaginationChange} pageSize="2" total={total} />
             </Box>
           </Box>
         </Loading>
