@@ -6,6 +6,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
 
 import { useHistory, request, useParams } from 'ice';
+import { func } from 'prop-types';
 
 const EditorBlock = (props) => {
   const [blogName, setBlogName] = useState('');
@@ -16,6 +17,9 @@ const EditorBlock = (props) => {
   const [isCreative, setIsCreative] = useState(1);
   const [id, setId] = useState(0);
   const history = useHistory();
+
+  const [className, setClassName] = useState([]);
+  const [tagName, setTagName] = useState([]);
 
   const { url, uniqueId } = useParams();
   useEffect(() => {
@@ -102,7 +106,9 @@ const EditorBlock = (props) => {
         formatContent,
         topPriority,
         isCreative,
-        Token: window.sessionStorage.getItem('token'),
+        columns: className,
+        tags: tagName,
+        // Token: window.sessionStorage.getItem('token'),
       });
       // .then((res) => {
       Message.success('修改成功');
@@ -113,6 +119,7 @@ const EditorBlock = (props) => {
       setHtmlContent('');
       setTopPriority(0);
       setIsCreative(0);
+      history.go(-1);
       return;
       // });
     }
@@ -130,9 +137,11 @@ const EditorBlock = (props) => {
         // title,
         summary,
         formatContent,
+        columns: className,
+        tags: tagName,
         topPriority,
         isCreative,
-        Token: window.sessionStorage.getItem('token'),
+        // Token: window.sessionStorage.getItem('token'),
       })
       .then((res) => {
         if (res.data.success) {
@@ -144,23 +153,34 @@ const EditorBlock = (props) => {
           setHtmlContent('');
           setTopPriority(0);
           setIsCreative(0);
+          history.go(-1);
         } else {
           Message.warning(res.data.msg);
         }
       });
   };
 
-  const dataSource1 = [
-    { value: '10001', label: '已有的专栏1' },
-    { value: '10002', label: '已有的专栏2' },
-  ];
-  const dataSource2 = [
-    { value: '10001', label: '已有的标签1' },
-    { value: '10002', label: '已有的标签2' },
-  ];
+  const dataSource1 = [];
+  const dataSource2 = [];
 
-  function handleChange(value) {
+  function handleChangezhuanlan(value) {
     console.log(value);
+    const tmp = className;
+    tmp.push({
+      className: value[value.length - 1],
+    });
+    setClassName(tmp);
+    console.log(tmp);
+  }
+
+  function handleChangetag(value) {
+    console.log(value);
+    const tmp = tagName;
+    tmp.push({
+      tagName: value[value.length - 1],
+    });
+    setTagName(tmp);
+    console.log(tmp);
   }
   return (
     <div>
@@ -211,7 +231,7 @@ const EditorBlock = (props) => {
             aria-label="tag mode"
             mode="tag"
             defaultValue={[]}
-            onChange={handleChange}
+            onChange={handleChangezhuanlan}
             dataSource={dataSource1}
             style={{ width: 300 }}
           />
@@ -223,7 +243,7 @@ const EditorBlock = (props) => {
             aria-label="tag mode"
             mode="tag"
             defaultValue={[]}
-            onChange={handleChange}
+            onChange={handleChangetag}
             dataSource={dataSource2}
             style={{ width: 300 }}
           />

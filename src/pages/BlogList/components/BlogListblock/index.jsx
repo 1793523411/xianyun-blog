@@ -43,6 +43,9 @@ const BlogListblock = (props) => {
 
   const [total, setTotal] = useState(0);
 
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+
   useEffect(() => {
     getList();
     setTimeout(() => {
@@ -100,18 +103,37 @@ const BlogListblock = (props) => {
   };
   const onChangestartValue = (val) => {
     console.log(formatDate(val._d));
+    setStart(formatDate(val._d));
     //todo 根据时间查询
-    // request
-    //   .post('/article/filter', {
-    //     blogName: searchValue,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.rows);
-    //   });
+    request
+      .post('/article/filter', {
+        params: {
+          beginTime: formatDate(val._d),
+          endTime: formatDate(val._d),
+        },
+      })
+      .then((res) => {
+        console.log(res.rows);
+        SetCard(res.rows);
+        setTotal(res.rows.length);
+      });
   };
   const onChangeEndValue = (val) => {
     //todo 根据时间查询
     console.log(formatDate(val._d));
+    setEnd(formatDate(val._d));
+    request
+      .post('/article/filter', {
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+      })
+      .then((res) => {
+        console.log(res.rows);
+        SetCard(res.rows);
+        setTotal(res.rows.length);
+      });
   };
 
   const onChangetype = function (value) {
@@ -279,9 +301,9 @@ const BlogListblock = (props) => {
           <DatePicker onChange={onChangeEndValue} />
           <Select
             id="basic-demo"
-            style={{ width: 120 }}
+            style={{ width: 160 }}
             onChange={onChangetype}
-            defaultValue="文章类型"
+            defaultValue="专栏"
             aria-label="name is"
             showSearch
             hasClear
@@ -291,9 +313,9 @@ const BlogListblock = (props) => {
           </Select>
           <Select
             id="basic-demo"
-            style={{ width: 200 }}
+            style={{ width: 160 }}
             onChange={onChangezhuanlan}
-            defaultValue="分类专栏"
+            defaultValue="标签"
             aria-label="name is"
             showSearch
             hasClear

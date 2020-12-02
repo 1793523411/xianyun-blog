@@ -36,6 +36,11 @@ const SettingPersonBlock = (props) => {
   const [userState, userDispatchers] = store.useModel('user');
 
   const DEFAULT_ON_SUBMIT = async (values, errors) => {
+    // const rexp = /.*[/u4e00-/u9fa5]+.*$/;
+    if (escape(values.userName).indexOf('%u') > 0) {
+      Message.warning('用户名不能包含中文!');
+      return false;
+    }
     if (errors) {
       console.log('errors', errors);
       return;
@@ -66,7 +71,6 @@ const SettingPersonBlock = (props) => {
 
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
-
 
   useEffect(() => {
     request
