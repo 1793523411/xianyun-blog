@@ -55,26 +55,49 @@ const BlogListblock = (props) => {
 
   const getList = () => {
     setLoading(true);
+    // request
+    //   .get('/article/getList/all')
+    //   .then((res) => {
+    //     // if (res.data.success === false) {
+    //     //   history.push('/user/login');
+    //     // }
+    //     console.log(res);
+    //     // SetCard(res.data);
+    //     SetCard(res.rows);
+    //     setLoading(false);
+    //     setTotal(res.total);
+    //   })
+    //   .catch((e) => {
+    //     // history.push('/user/login');
+    //   });
+
     request
-      .get('/article/getList/all')
+      .post('/article/page', {
+        pageNum: 1,
+        pageSize: 5,
+      })
       .then((res) => {
-        // if (res.data.success === false) {
-        //   history.push('/user/login');
-        // }
         console.log(res);
-        // SetCard(res.data);
         SetCard(res.rows);
         setLoading(false);
         setTotal(res.total);
-      })
-      .catch((e) => {
-        // history.push('/user/login');
       });
   };
 
   const onPaginationChange = (v) => {
     console.log(v);
     setLoading(true);
+    request
+      .post('/article/page', {
+        pageNum: v,
+        pageSize: 5,
+      })
+      .then((res) => {
+        console.log(res);
+        SetCard(res.rows);
+        setLoading(false);
+        setTotal(res.total);
+      });
     setLoading(false);
   };
 
@@ -106,11 +129,13 @@ const BlogListblock = (props) => {
     setStart(formatDate(val._d));
     //todo 根据时间查询
     request
-      .post('/article/filter', {
+      .post('/article/page', {
         params: {
           beginTime: formatDate(val._d),
           endTime: formatDate(val._d),
         },
+        pageNum: 1,
+        pageSize: 5,
       })
       .then((res) => {
         console.log(res.rows);
@@ -123,11 +148,13 @@ const BlogListblock = (props) => {
     console.log(formatDate(val._d));
     setEnd(formatDate(val._d));
     request
-      .post('/article/filter', {
+      .post('/article/page', {
         params: {
           beginTime: start,
-          endTime: end,
+          endTime: formatDate(val._d),
         },
+        pageNum: 1,
+        pageSize: 5,
       })
       .then((res) => {
         console.log(res.rows);
@@ -140,8 +167,10 @@ const BlogListblock = (props) => {
     setLoading(true);
     console.log(value);
     request
-      .post('/article/filter', {
+      .post('/article/page', {
         isCreative: value === '原创' ? 1 : 0,
+        pageNum: 1,
+        pageSize: 5,
       })
       .then((res) => {
         console.log(res.rows);
@@ -157,8 +186,10 @@ const BlogListblock = (props) => {
     setLoading(true);
     console.log(searchValue);
     request
-      .post('/article/filter', {
+      .post('/article/page', {
         blogName: searchValue,
+        pageNum: 1,
+        pageSize: 5,
       })
       .then((res) => {
         console.log(res.rows);
@@ -355,7 +386,7 @@ const BlogListblock = (props) => {
               <div className={styles.total}>
                 共<span>{total}</span>篇文章
               </div>
-              <Pagination onChange={onPaginationChange} pageSize="2" total={total} />
+              <Pagination onChange={onPaginationChange} pageSize="5" total={total} />
             </Box>
           </Box>
         </Loading>

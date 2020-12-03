@@ -21,18 +21,65 @@ const EditorBlock = (props) => {
   const [className, setClassName] = useState([]);
   const [tagName, setTagName] = useState([]);
 
+  const [defaultTag, setTag] = useState([]);
+  const [defaultTagV, setTagV] = useState([]);
+
+  const [allLan, setAllLan] = useState([]);
+  const [allLanV, setAllLanV] = useState([]);
+
+  const [allTag, setAllTag] = useState([]);
+
   const { url, uniqueId } = useParams();
+
   useEffect(() => {
     // if (location.href.indexOf('#reloaded') == -1) {
     //   location.href = location.href + '#reloaded';
     //   location.reload();
     // }
+    request.get('/article/getallTag').then((res) => {
+      // console.log('所有专栏和标签', res);
+      let tmp = [];
+      let tmp2 = [];
+      res.data.columns.forEach((item, index) => {
+        tmp.push({
+          value: item.className,
+          label: item.className,
+        });
+        tmp2.push(item.className);
+      });
+      let tmp3 = [];
+      res.data.tags.forEach((item, index) => {
+        tmp3.push({
+          value: item.tagName,
+          label: item.tagName,
+        });
+        // tmp2.push(item.tagName);
+      });
+      setAllLan(tmp);
+      setAllLanV(tmp2);
+      setAllTag(tmp3);
+    });
     console.log(url);
     console.log(uniqueId);
     if (uniqueId > 0 && url !== 0) {
       console.log('111');
       request.post('/article/getById', { url, uniqueId }).then((res) => {
         console.log(res);
+        let tmp = [];
+        let tmp2 = [];
+        res.data.tags.forEach((item, index) => {
+          tmp.push({
+            value: item.tagName,
+            label: item.tagName,
+          });
+          tmp2.push(item.tagName);
+        });
+        console.log(tmp);
+        console.log(tmp2);
+        setTag(tmp);
+        setTagV(tmp2);
+        // console.log(defaultTagV);
+        console.log(res.data.tags);
         setBlogName(res.data.blogName);
         setTitle(res.data.title);
         setContent(res.data.summary);
@@ -227,26 +274,50 @@ const EditorBlock = (props) => {
       <Box direction="row" justify="flex-start" padding={10}>
         <div style={{ lineHeight: '30px' }}>
           专栏：
-          <Select
-            aria-label="tag mode"
-            mode="tag"
-            defaultValue={[]}
-            onChange={handleChangezhuanlan}
-            dataSource={dataSource1}
-            style={{ width: 300 }}
-          />
+          {allLanV.length !== 0 && (
+            <Select
+              aria-label="tag mode"
+              mode="tag"
+              defaultValue={[]}
+              onChange={handleChangezhuanlan}
+              dataSource={allLan}
+              style={{ width: 300 }}
+            />
+          )}
+          {allLanV.length === 0 && (
+            <Select
+              aria-label="tag mode"
+              mode="tag"
+              defaultValue={[]}
+              onChange={handleChangezhuanlan}
+              dataSource={allLan}
+              style={{ width: 300 }}
+            />
+          )}
         </div>
         <div style={{ width: '6vh' }}></div>
         <div style={{ lineHeight: '30px' }}>
           标签：
-          <Select
-            aria-label="tag mode"
-            mode="tag"
-            defaultValue={[]}
-            onChange={handleChangetag}
-            dataSource={dataSource2}
-            style={{ width: 300 }}
-          />
+          {defaultTagV.length !== 0 && (
+            <Select
+              aria-label="tag mode"
+              mode="tag"
+              defaultValue={defaultTagV}
+              onChange={handleChangetag}
+              dataSource={allTag}
+              style={{ width: 300 }}
+            />
+          )}
+          {defaultTagV.length === 0 && (
+            <Select
+              aria-label="tag mode"
+              mode="tag"
+              defaultValue={[]}
+              onChange={handleChangetag}
+              dataSource={allTag}
+              style={{ width: 300 }}
+            />
+          )}
         </div>
       </Box>
       <Box direction="row" justify="center" padding={20}>
