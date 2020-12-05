@@ -46,8 +46,17 @@ const BlogListblock = (props) => {
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
 
+  const [className, setClassName] = useState('');
+  const [tag, setTag] = useState('');
+
+  const [lanTag, setLan] = useState('');
+
   useEffect(() => {
     getList();
+    request.get('/article/getallTag').then((res) => {
+      console.log('专栏和标签', res);
+      setLan(res.data);
+    });
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -75,6 +84,13 @@ const BlogListblock = (props) => {
       .post('/article/page', {
         pageNum: 1,
         pageSize: 5,
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+        blogName: searchValue,
+        className,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res);
@@ -85,12 +101,20 @@ const BlogListblock = (props) => {
   };
 
   const onPaginationChange = (v) => {
+    // console.log(st)
     console.log(v);
     setLoading(true);
     request
       .post('/article/page', {
         pageNum: v,
         pageSize: 5,
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+        blogName: searchValue,
+        className,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res);
@@ -125,6 +149,11 @@ const BlogListblock = (props) => {
     return `${y}-${m}-${d}`;
   };
   const onChangestartValue = (val) => {
+    if (!val._d) {
+      getList();
+      return;
+    }
+
     console.log(formatDate(val._d));
     setStart(formatDate(val._d));
     //todo 根据时间查询
@@ -136,6 +165,9 @@ const BlogListblock = (props) => {
         },
         pageNum: 1,
         pageSize: 5,
+        blogName: searchValue,
+        className,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res.rows);
@@ -144,6 +176,10 @@ const BlogListblock = (props) => {
       });
   };
   const onChangeEndValue = (val) => {
+    if (!val._d) {
+      getList();
+      return;
+    }
     //todo 根据时间查询
     console.log(formatDate(val._d));
     setEnd(formatDate(val._d));
@@ -155,6 +191,9 @@ const BlogListblock = (props) => {
         },
         pageNum: 1,
         pageSize: 5,
+        blogName: searchValue,
+        className,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res.rows);
@@ -163,14 +202,25 @@ const BlogListblock = (props) => {
       });
   };
 
-  const onChangetype = function (value) {
+  const onChangelan = function (value) {
+    if (!value) {
+      getList();
+      return;
+    }
+    setClassName(value);
     setLoading(true);
     console.log(value);
     request
       .post('/article/page', {
-        isCreative: value === '原创' ? 1 : 0,
+        className: value,
         pageNum: 1,
         pageSize: 5,
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+        blogName: searchValue,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res.rows);
@@ -179,8 +229,32 @@ const BlogListblock = (props) => {
         setTotal(res.rows.length);
       });
   };
-  const onChangezhuanlan = function (value) {
+  const onChangetag = function (value) {
+    if (!value) {
+      getList();
+      return;
+    }
+    setTag(value);
+    setLoading(true);
     console.log(value);
+    request
+      .post('/article/page', {
+        tagName: value,
+        pageNum: 1,
+        pageSize: 5,
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+        blogName: searchValue,
+        className,
+      })
+      .then((res) => {
+        console.log(res.rows);
+        SetCard(res.rows);
+        setLoading(false);
+        setTotal(res.rows.length);
+      });
   };
   const search = () => {
     setLoading(true);
@@ -190,6 +264,12 @@ const BlogListblock = (props) => {
         blogName: searchValue,
         pageNum: 1,
         pageSize: 5,
+        params: {
+          beginTime: start,
+          endTime: end,
+        },
+        className,
+        tagName: tag,
       })
       .then((res) => {
         console.log(res.rows);
@@ -333,27 +413,30 @@ const BlogListblock = (props) => {
           <Select
             id="basic-demo"
             style={{ width: 160 }}
-            onChange={onChangetype}
+            onChange={onChangelan}
             defaultValue="专栏"
             aria-label="name is"
             showSearch
             hasClear
           >
-            <Option value="原创">原创</Option>
-            <Option value="转载">转载</Option>
+            {lanTag &&
+              lanTag.columns.map((item, index) => {
+                return <Option value={item.className}>{item.className}</Option>;
+              })}
           </Select>
           <Select
             id="basic-demo"
             style={{ width: 160 }}
-            onChange={onChangezhuanlan}
+            onChange={onChangetag}
             defaultValue="标签"
             aria-label="name is"
             showSearch
             hasClear
           >
-            <Option value="jack">Jack</Option>
-            <Option value="frank">Frank</Option>
-            <Option value="hugo">Hugo</Option>
+            {lanTag &&
+              lanTag.tags.map((item, index) => {
+                return <Option value={item.tagName}>{item.tagName}</Option>;
+              })}
           </Select>
           <div style={{ width: '3vh' }}></div>
           <Input

@@ -29,6 +29,8 @@ const EditorBlock = (props) => {
 
   const [allTag, setAllTag] = useState([]);
 
+  const [defLan, setDefLan] = useState([]);
+
   const { url, uniqueId } = useParams();
 
   useEffect(() => {
@@ -67,13 +69,30 @@ const EditorBlock = (props) => {
         console.log(res);
         let tmp = [];
         let tmp2 = [];
+        let tmpDT = [];
         res.data.tags.forEach((item, index) => {
           tmp.push({
             value: item.tagName,
             label: item.tagName,
           });
+          tmpDT.push({
+            className: item.tagName,
+            articleCount: 0,
+          });
           tmp2.push(item.tagName);
         });
+        setTagName(tmpDT);
+        let tmp3 = [];
+        let tmpDL = [];
+        res.data.columns.forEach((item, index) => {
+          tmp3.push(item.className);
+          tmpDL.push({
+            className: item.className,
+            articleCount: 0,
+          });
+        });
+        setClassName(tmpDL);
+        setDefLan(tmp3);
         console.log(tmp);
         console.log(tmp2);
         setTag(tmp);
@@ -155,7 +174,7 @@ const EditorBlock = (props) => {
         isCreative,
         columns: className,
         tags: tagName,
-        // Token: window.sessionStorage.getItem('token'),
+        Token: window.sessionStorage.getItem('token'),
       });
       // .then((res) => {
       Message.success('修改成功');
@@ -215,19 +234,28 @@ const EditorBlock = (props) => {
     const tmp = className;
     tmp.push({
       className: value[value.length - 1],
+      articleCount: 0,
     });
     setClassName(tmp);
     console.log(tmp);
   }
 
   function handleChangetag(value) {
-    console.log(value);
-    const tmp = tagName;
-    tmp.push({
-      tagName: value[value.length - 1],
+    console.log('value', value);
+    const tmp = [];
+    value.forEach((item) => {
+      tmp.push({
+        tagName: item,
+        articleCount: 0,
+      });
     });
+    // const tmp = tagName;
+    // tmp.push({
+    //   tagName: value[value.length - 1],
+    //   articleCount: 0,
+    // });
     setTagName(tmp);
-    console.log(tmp);
+    console.log('tmp', tmp);
   }
   return (
     <div>
@@ -274,17 +302,17 @@ const EditorBlock = (props) => {
       <Box direction="row" justify="flex-start" padding={10}>
         <div style={{ lineHeight: '30px' }}>
           专栏：
-          {allLanV.length !== 0 && (
+          {defLan.length !== 0 && (
             <Select
               aria-label="tag mode"
               mode="tag"
-              defaultValue={[]}
+              defaultValue={defLan}
               onChange={handleChangezhuanlan}
               dataSource={allLan}
               style={{ width: 300 }}
             />
           )}
-          {allLanV.length === 0 && (
+          {defLan.length === 0 && (
             <Select
               aria-label="tag mode"
               mode="tag"
@@ -295,7 +323,7 @@ const EditorBlock = (props) => {
             />
           )}
         </div>
-        <div style={{ width: '6vh' }}></div>
+        <div style={{ width: '37vh' }}></div>
         <div style={{ lineHeight: '30px' }}>
           标签：
           {defaultTagV.length !== 0 && (
