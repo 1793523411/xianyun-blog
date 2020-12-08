@@ -122,7 +122,6 @@ const BlogListblock = (props) => {
         setLoading(false);
         setTotal(res.total);
       });
-    setLoading(false);
   };
 
   const onClose = (reason) => {

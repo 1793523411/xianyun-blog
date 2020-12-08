@@ -22,27 +22,84 @@ const ArticleBlock = (props) => {
   };
   return (
     <>
-      <Card free>
-        <Card.Header title="博客信息" />
+      <Card free style={{ padding: 15 }}>
+        <Box spacing={5}>
+          <Box direction="row" justify="flex-start" align="center" padding={10} spacing={10}>
+            <h1>{info.blogName}</h1>
+            {info.isCreator && (
+              <Tag key={'c_#f50'} color="#f50" size="small">
+                原创
+              </Tag>
+            )}
+            {info.isCreative && (
+              <Tag key={'c_#2db7f5'} color="#2db7f5" size="small">
+                置顶
+              </Tag>
+            )}
+          </Box>
+
+          <div>
+            <Box direction="row" justify="flex-start" align="center" padding={10} spacing={10}>
+              <div>时间 : 2020-09-23 20:14:21</div>
+              <Box direction="row" align="center">
+                <div>
+                  <Icon type="favorites-filling" style={{ color: '#999' }} />
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;{info.likes}</div>
+              </Box>
+              <Box direction="row" align="center">
+                <div>
+                  <Icon type="eye" style={{ color: '#999' }} />
+                </div>
+                <div>&nbsp;&nbsp;&nbsp;{info.visits}</div>
+              </Box>
+
+              <div>
+                <Box direction="row" justify="flex-start" align="center">
+                  分类专栏：
+                  {info.columns &&
+                    info.columns.map((item) => {
+                      return (
+                        <div
+                          style={{ backgroundColor: '#eee', borderRadius: '20%', padding: '3px', marginRight: '3px' }}
+                        >
+                          {item.className}
+                        </div>
+                      );
+                    })}
+                </Box>
+              </div>
+              <div>
+                <Box direction="row" justify="flex-start" align="center">
+                  所属标签：
+                  {info.tags &&
+                    info.tags.map((item) => {
+                      return (
+                        <div style={{ backgroundColor: '#eee', borderRadius: '20%', padding: '3px' }}>
+                          {item.tagName}
+                        </div>
+                      );
+                    })}
+                </Box>
+              </div>
+            </Box>
+          </div>
+
+          <div dangerouslySetInnerHTML={{ __html: info.formatContent }} className={styles.htmlContent}></div>
+        </Box>
+      </Card>
+    </>
+  );
+};
+
+/*
+<Card.Header title="博客信息" />
         <Card.Divider />
         <Card.Content>
           <div className={styles.Content}>
             <Form labelAlign="top" responsive>
-              <Form.Item colSpan={4} label="博客名称">
-                <span>{info.blogName}</span>
-              </Form.Item>
-              <Form.Item colSpan={4} label="创建时间">
-                <span>{formatDate(info.createTime)}</span>
-              </Form.Item>
-              <Form.Item colSpan={4} label="是否原创">
-                <span>{info.isCreative}</span>
-              </Form.Item>
-              <Form.Item colSpan={4} label="访问量">
-                <span>{info.visits}</span>
-              </Form.Item>
-              <Form.Item colSpan={4} label="喜欢人数">
-                <span>{info.likes}</span>
-              </Form.Item>
+
+
               <Form.Item colSpan={4} label="专栏">
                 <span>专栏一</span>
               </Form.Item>
@@ -58,10 +115,6 @@ const ArticleBlock = (props) => {
               </Form.Item>
             </Form>
           </div>
-        </Card.Content>
-      </Card>
-    </>
-  );
-};
+        </Card.Content> */
 
 export default ArticleBlock;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Box, Switch, Button, Message, Select } from '@alifd/next';
+import { Input, Box, Switch, Button, Message, Select, Dialog } from '@alifd/next';
 import styles from './index.module.scss';
 import marked from 'marked';
 import hljs from 'highlight.js';
@@ -32,6 +32,8 @@ const EditorBlock = (props) => {
   const [defLan, setDefLan] = useState([]);
 
   const { url, uniqueId } = useParams();
+
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     // if (location.href.indexOf('#reloaded') == -1) {
@@ -81,6 +83,7 @@ const EditorBlock = (props) => {
           });
           tmp2.push(item.tagName);
         });
+        console.log('页面初始化后的临时tag', tmpDT);
         setTagName(tmpDT);
         let tmp3 = [];
         let tmpDL = [];
@@ -159,6 +162,11 @@ const EditorBlock = (props) => {
     setIsCreative(checked ? 1 : 0);
   }
   const submit = async () => {
+    if (tagName.length > 5 || className.length > 5) {
+      Message.warning('标签和专栏个数不能超过五个');
+      return;
+    }
+    console.log('提交传给后端的数据', tagName);
     if (!blogName || !summary) {
       Message.warning('请将信息填写完整');
       return;
@@ -186,6 +194,7 @@ const EditorBlock = (props) => {
       setTopPriority(0);
       setIsCreative(0);
       history.go(-1);
+      setVisible(false);
       return;
       // });
     }
@@ -220,6 +229,7 @@ const EditorBlock = (props) => {
           setTopPriority(0);
           setIsCreative(0);
           history.go(-1);
+          setVisible(false);
         } else {
           Message.warning(res.data.msg);
         }
@@ -231,10 +241,17 @@ const EditorBlock = (props) => {
 
   function handleChangezhuanlan(value) {
     console.log(value);
-    const tmp = className;
-    tmp.push({
-      className: value[value.length - 1],
-      articleCount: 0,
+    // const tmp = className;
+    // tmp.push({
+    //   className: value[value.length - 1],
+    //   articleCount: 0,
+    // });
+    const tmp = [];
+    value.forEach((item) => {
+      tmp.push({
+        className: item,
+        articleCount: 0,
+      });
     });
     setClassName(tmp);
     console.log(tmp);
@@ -254,9 +271,21 @@ const EditorBlock = (props) => {
     //   tagName: value[value.length - 1],
     //   articleCount: 0,
     // });
+    console.log('提交前的tag', tmp);
     setTagName(tmp);
     console.log('tmp', tmp);
   }
+
+  const onOpen = () => {
+    setVisible(true);
+  };
+
+  const onClose = (reason) => {
+    console.log(reason);
+
+    setVisible(false);
+  };
+
   return (
     <div>
       <Box direction="row" align="center" padding={10} className="box">
@@ -298,58 +327,65 @@ const EditorBlock = (props) => {
         />
         <div dangerouslySetInnerHTML={{ __html: formatContent }} className={styles.htmlContent}></div>
       </Box>
+
+      <Dialog title="发布文章" visible={visible} onOk={submit} onCancel={onClose} onClose={onClose}>
+        <Box direction="column" justify="flex-start" padding={10}>
+          <div style={{ lineHeight: '30px' }}>
+            专栏：
+            {defLan.length !== 0 && (
+              <Select
+                aria-label="tag mode"
+                mode="tag"
+                defaultValue={defLan}
+                onChange={handleChangezhuanlan}
+                dataSource={allLan}
+                style={{ width: 300 }}
+              />
+            )}
+            {defLan.length === 0 && (
+              <Select
+                aria-label="tag mode"
+                mode="tag"
+                defaultValue={[]}
+                onChange={handleChangezhuanlan}
+                dataSource={allLan}
+                style={{ width: 300 }}
+              />
+            )}
+          </div>
+          <br />
+          <div style={{ lineHeight: '30px' }}>
+            标签：
+            {defaultTagV.length !== 0 && (
+              <Select
+                aria-label="tag mode"
+                mode="tag"
+                defaultValue={defaultTagV}
+                onChange={handleChangetag}
+                dataSource={allTag}
+                style={{ width: 300 }}
+              />
+            )}
+            {defaultTagV.length === 0 && (
+              <Select
+                aria-label="tag mode"
+                mode="tag"
+                defaultValue={[]}
+                onChange={handleChangetag}
+                dataSource={allTag}
+                style={{ width: 300 }}
+              />
+            )}
+          </div>
+        </Box>
+      </Dialog>
       {/* <div style={{ marginLeft: '-1%' }}></div> */}
-      <Box direction="row" justify="flex-start" padding={10}>
-        <div style={{ lineHeight: '30px' }}>
-          专栏：
-          {defLan.length !== 0 && (
-            <Select
-              aria-label="tag mode"
-              mode="tag"
-              defaultValue={defLan}
-              onChange={handleChangezhuanlan}
-              dataSource={allLan}
-              style={{ width: 300 }}
-            />
-          )}
-          {defLan.length === 0 && (
-            <Select
-              aria-label="tag mode"
-              mode="tag"
-              defaultValue={[]}
-              onChange={handleChangezhuanlan}
-              dataSource={allLan}
-              style={{ width: 300 }}
-            />
-          )}
-        </div>
-        <div style={{ width: '37vh' }}></div>
-        <div style={{ lineHeight: '30px' }}>
-          标签：
-          {defaultTagV.length !== 0 && (
-            <Select
-              aria-label="tag mode"
-              mode="tag"
-              defaultValue={defaultTagV}
-              onChange={handleChangetag}
-              dataSource={allTag}
-              style={{ width: 300 }}
-            />
-          )}
-          {defaultTagV.length === 0 && (
-            <Select
-              aria-label="tag mode"
-              mode="tag"
-              defaultValue={[]}
-              onChange={handleChangetag}
-              dataSource={allTag}
-              style={{ width: 300 }}
-            />
-          )}
-        </div>
-      </Box>
+
       <Box direction="row" justify="center" padding={20}>
-        <Button type="primary" onClick={submit}>
+        {/* <Button type="primary" onClick={submit}>
+          提交
+        </Button> */}
+        <Button type="primary" onClick={onOpen}>
           提交
         </Button>
         <div style={{ width: '6vh' }}></div>
