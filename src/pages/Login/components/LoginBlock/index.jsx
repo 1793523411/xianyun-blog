@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Message, Form, Divider, Checkbox, Icon } from '@alifd/next';
+import { Input, Message, Form, Divider, Checkbox, Icon, Box, Avatar } from '@alifd/next';
 import { useInterval } from './utils';
 import styles from './index.module.scss';
 import { useHistory, Link, request } from 'ice';
@@ -78,10 +78,10 @@ const LoginBlock = (
 
     if (values.phone) {
       const data = {
-        mobile: values.phone,
-        code: values.code,
-        loginType: 2,
-        ip: window.sessionStorage.getItem('ip')
+        extendKey: values.phone,
+        credentials: values.code,
+        extendType: 1,
+        ip: window.sessionStorage.getItem('ip'),
       };
 
       await request.post('/login', data).then((res) => {
@@ -107,11 +107,11 @@ const LoginBlock = (
     if (phone.test(values.name)) {
       Message.success('手机号登录');
       const data = {
-        mobile: values.name,
+        extendKey: values.name,
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
-        password: values.password,
-        loginType: 1,
-        ip: window.sessionStorage.getItem('ip')
+        credentials: values.password,
+        extendType: 0,
+        ip: window.sessionStorage.getItem('ip'),
       };
       await request.post('/login', data).then((res) => {
         console.log(res);
@@ -126,11 +126,11 @@ const LoginBlock = (
     } else if (email.test(values.name)) {
       // Message.success('邮箱登录');
       const data = {
-        email: values.name,
+        extendKey: values.name,
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
-        password: values.password,
-        loginType: 3,
-        ip: window.sessionStorage.getItem('ip')
+        credentials: values.password,
+        extendType: 0,
+        ip: window.sessionStorage.getItem('ip'),
       };
       await request.post('/login', data).then((res) => {
         console.log(res);
@@ -146,11 +146,11 @@ const LoginBlock = (
       Message.success('用户名登录');
 
       const data = {
-        userName: values.name,
+        extendKey: values.name,
         // eslint-disable-next-line @iceworks/best-practices/no-secret-info
-        password: values.password,
-        loginType: 0,
-        ip: window.sessionStorage.getItem('ip')
+        credentials: values.password,
+        extendType: 0,
+        ip: window.sessionStorage.getItem('ip'),
       };
       await request.post('/login', data).then((res) => {
         console.log(res);
@@ -283,6 +283,42 @@ const LoginBlock = (
             >
               <p className={styles.link}>注册账号</p>
             </Link>
+            <Box spacing={20} direction="row" justify="center" align="center">
+              <div
+                onClick={() => {
+                  location.href = 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/oschina';
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <Avatar
+                  src="https://portrait.gitee.com/uploads/avatars/namespace/0/1_oschina_1578989292.png"
+                  size="small"
+                />
+              </div>
+              <div
+                onClick={() => {
+                  location.href = 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/alipay ';
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <Avatar
+                  src="https://th.bing.com/th/id/OIP.JYY7lPGUd6rVmme2QVLxIAHaHW?w=182&h=181&c=7&o=5&pid=1.7"
+                  size="small"
+                />
+              </div>
+              <div
+                onClick={() => {
+                  location.href = 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/gitee';
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                {' '}
+                <Avatar
+                  src="https://th.bing.com/th/id/OIP.EyKsoWBaXghWwleLU91RVQAAAA?w=164&h=176&c=7&o=5&pid=1.7"
+                  size="small"
+                />
+              </div>
+            </Box>
           </div>
         </Form>
       </div>
