@@ -22,7 +22,10 @@ const appConfig = {
           // 发送请求前：可以对 RequestConfig 做一些统一处理
           console.log(window.sessionStorage.getItem('token'));
           const tokenStr = window.sessionStorage.getItem('token');
+          const JSESSIONID = window.sessionStorage.getItem('JSESSIONID');
           config.headers.Token = tokenStr;
+          config.headers.JSESSIONID = JSESSIONID;
+          console.log(config.headers);
           return config;
         },
         onError: (error) => {

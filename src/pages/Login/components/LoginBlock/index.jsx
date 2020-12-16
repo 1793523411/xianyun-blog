@@ -89,6 +89,7 @@ const LoginBlock = (
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
           window.sessionStorage.setItem('token', res.data.token);
+          window.sessionStorage.setItem('JSESSIONID', res.JSESSIONID);
           history.push('/');
           return;
         } else {
@@ -118,6 +119,7 @@ const LoginBlock = (
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
           window.sessionStorage.setItem('token', res.data.token);
+          window.sessionStorage.setItem('JSESSIONID', res.JSESSIONID);
           history.push('/');
         } else {
           Message.success('用户名或密码错误');
@@ -137,6 +139,7 @@ const LoginBlock = (
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
           window.sessionStorage.setItem('token', res.data.token);
+          window.sessionStorage.setItem('JSESSIONID', res.JSESSIONID);
           history.push('/');
         } else {
           Message.success(`${res.msg}`);
@@ -157,6 +160,7 @@ const LoginBlock = (
         if (res.data.success === true) {
           Message.success(`登陆成功,token为${res.data.token}`);
           window.sessionStorage.setItem('token', res.data.token);
+          window.sessionStorage.setItem('JSESSIONID', res.JSESSIONID);
           history.push('/');
         } else {
           Message.success(`${res.msg}`);
