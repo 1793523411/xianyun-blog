@@ -312,7 +312,13 @@ const LoginBlock = (
               </div>
               <div
                 onClick={() => {
-                  location.href = 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/gitee';
+                  // location.href = 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/gitee';
+                  window.open(
+                    // 'http://openapi.xianyun.site/xianyun-consumer/open/oauth/login/gitee',
+                    '#/user/auth',
+                    'newwindow',
+                    'height=400, width=600, top=0,left=0, toolbar=no,  menubar=no, scrollbars=no, resizable=no,location=no, status=no',
+                  );
                 }}
                 style={{ cursor: 'pointer' }}
               >

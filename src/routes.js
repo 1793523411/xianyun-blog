@@ -38,6 +38,7 @@ import Person from '@/pages/Person';
 import Editor from '@/pages/Editor';
 import BlogList from '@/pages/BlogList';
 import ArticleDetail from './pages/ArticleDetail';
+import AuthBlock from './pages/Login/components/LoginBlock/AuthBlock';
 
 const routerConfig = [
   {
@@ -47,6 +48,10 @@ const routerConfig = [
       {
         path: '/login',
         component: Login,
+      },
+      {
+        path: '/auth',
+        component: AuthBlock,
       },
       {
         path: '/register',
