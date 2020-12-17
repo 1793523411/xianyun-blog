@@ -39,6 +39,7 @@ import Editor from '@/pages/Editor';
 import BlogList from '@/pages/BlogList';
 import ArticleDetail from './pages/ArticleDetail';
 import AuthBlock from './pages/Login/components/LoginBlock/AuthBlock';
+import Succeess from './pages/Login/components/LoginBlock/Success';
 
 const routerConfig = [
   {
@@ -52,6 +53,10 @@ const routerConfig = [
       {
         path: '/auth',
         component: AuthBlock,
+      },
+      {
+        path: '/success',
+        component: Succeess,
       },
       {
         path: '/register',

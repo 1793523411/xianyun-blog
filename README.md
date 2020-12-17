@@ -47,3 +47,5 @@
 
 + 完成cooki的校验
 + 第三方登录
+
+关于第三方登录：`http://ice-blog.ygjie.icu/#/user/success?token="qwedwde"`

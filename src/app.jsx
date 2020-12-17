@@ -10,8 +10,8 @@ const appConfig = {
     withFullResponse: false,
 
     // eslint-disable-next-line @iceworks/best-practices/no-http-url
-    // baseURL: 'http://ice-blog-server.ygjie.icu',
-    baseURL: 'http://localhost:5005',
+    baseURL: 'http://ice-blog-server.ygjie.icu',
+    // baseURL: 'http://localhost:5005',
     headers: {},
     // ...RequestConfig 其他参数
 
